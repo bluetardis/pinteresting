@@ -23,12 +23,26 @@ $ git init
 $ ls -a
 $ ls (after cd into folder)
 $ git status #shows you what files you are tracking (or not tracking)
-$ git add .
+$ git add . (or -A to add all)
 $ git commit -am "initial commit"
-$ git add .
+
+####Recover/roll back
 $git checkout -f #brings us back to the last version
 
-###Server Config
+##Server Config for GitHub
+###generate a key ssh (CLOUD9 already as this done)
+ssh-keygen -t rsa -C "peter@bluetardis.com.au"
+
+###Test the connection
+ssh -T git@github.com
+
+###If all good then go to Git and create a repository
+https://github.com/new
+
+###Push up based on the info from Git for the new repository 
+(Choose the SSH Option to generate the commands)
+git remote add origin git@github.com:bluetardis/pinteresting.git
+git push -u origin master
 
 
 
