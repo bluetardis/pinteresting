@@ -82,10 +82,17 @@ git push
 
 
 #Creating things
+```
 rails generate controller pages home
-*This makes a homepage for us at*
+```
+This makes a homepage for us at
 https://pinteresting-peterbishop.c9users.io/pages/home
-'''app views pages home.html.erb'''
+
+We can go edit the files
+app views pages home.html.erb
+
+
+
 
 
 
