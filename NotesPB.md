@@ -50,6 +50,25 @@ https://github.com/new
 git remote add origin git@github.com:bluetardis/pinteresting.git
 git push -u origin master
 
+##The normal git dance
+git commit -am "What changed"
+git push
 
 
 
+#Creating things
+rails generate controller pages home
+*This makes a homepage for us at*
+https://pinteresting-peterbishop.c9users.io/pages/home
+'''app views pages home.html.erb'''
+
+
+
+
+
+
+
+
+
+
+day6
