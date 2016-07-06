@@ -1,8 +1,8 @@
 #Pinteresting - PB Notes
 
-This is the pinteresting sample for
+This is the pinteresting sample for:
 
-[Pinteresting]https://pinteresting-peterbishop.c9users.io())
+[Pinteresting](https://pinteresting-peterbishop.c9users.io)
 
 by [Blue Tardis](https://bluetardis.com)
 
@@ -11,7 +11,10 @@ rails -v
 
 
 ##Create new workspace
+```
 rails new pinteresting
+```
+
 (This is already done for Cloud9 if you picked a rails environment and is the ~/workspace)
 
 
@@ -21,6 +24,7 @@ rails server -p $PORT -b $IP
 
 ##Git Setup
 ###Local Config
+```
 git config --global user.name "Your Name"
 $ git config --global user.name #checks that your name is correct
 $ git config --global user.email "your@email.com"
@@ -31,6 +35,7 @@ $ ls (after cd into folder)
 $ git status #shows you what files you are tracking (or not tracking)
 $ git add . (or -A to add all)
 $ git commit -am "initial commit"
+```
 
 ####Recover/roll back
 $git checkout -f #brings us back to the last version
