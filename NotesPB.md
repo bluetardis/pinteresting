@@ -81,7 +81,7 @@ git push
 
 
 
-#Creating things
+#Creating the home page
 ```
 rails generate controller pages home
 ```
@@ -89,7 +89,28 @@ This makes a homepage for us at
 https://pinteresting-peterbishop.c9users.io/pages/home
 
 We can go edit the files
-app views pages home.html.erb
+/app/views/pages/home.html.erb
+
+
+
+#Set the Root Path with Routes
+We need to go tell Rails how to route pages.
+
+The file for this lives initial
+/config/routes.rb
+and the initial line was generated when we made the home page
+
+The home page is actually called the Root Route so we need to add that.  There are hints in the file itself.
+```
+root 'pages#home'
+```
+
+
+
+
+
+
+
 
 
 
