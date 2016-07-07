@@ -195,6 +195,8 @@ This is the template that is the "theme" or for all pages.
 
 Place this before the *<%= yield %> if you want it as a header.
 
+------
+#Bootstrap
 
 
 
