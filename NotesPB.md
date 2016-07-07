@@ -180,10 +180,20 @@ Post on Reddit
 
 #Make some links etc.
 Basic approach is to link to a page defined in routes.rb  get *"about"* => "pages#about"
+FYI - the general home path is *root_path*
+
 ```
-<%= link_to "About", about_path %>
+<%= link_to "About", about_path %> 
+<%= link_to "Home", root_path %>
+
 ```
 
+#Lets follow DRY and make a Navigation bar
+/views/layouts/application.html.erb
+
+This is the template that is the "theme" or for all pages.
+
+Place this before the *<%= yield %> if you want it as a header.
 
 
 
@@ -206,6 +216,10 @@ Basic approach is to link to a page defined in routes.rb  get *"about"* => "page
 
 
 
+
+
+
+-----
 
 Starting Point is
 Day 9
