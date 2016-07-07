@@ -362,7 +362,9 @@ Things to change:
 * we need to tweak the code a little more to make the button etc work (responsive component when shrunk)
 * check out the code or bootstrap notes on *button* 
 
-####Button and Java
+##JavaScript 
+We have a button in the bar that doesnt work.  Time to add JavaScript support for bootstrap.
+
 /app/assets/javascripts/application.js
 *We need to include the Bootstrap components and will do this AFTER jquery lines*
 
@@ -370,6 +372,19 @@ Things to change:
 //= require bootstrap
 ```
 
+##Mobile Device Support
+The key word to look for is *"Viewport"*
+http://getbootstrap.com/getting-started/
+
+Notes are on the Basic-Template page 
+as of July 2016 it was the following lines which need to be included in the <head> of *application.html.erb*
+```
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+```
 
 
 
