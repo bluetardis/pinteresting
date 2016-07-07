@@ -6,6 +6,7 @@ This is the pinteresting sample for:
 
 by [Blue Tardis](https://bluetardis.com)
 
+
 ##Check the version
 ```
 rails -v
@@ -54,17 +55,13 @@ git checkout -f #brings us back to the last version
 ssh-keygen -t rsa -C "peter@bluetardis.com.au"
 ```
 
-
-
 ###Test the connection
 ```
 ssh -T git@github.com
 ```
 
-
 ###If all good then go to Git and create a repository
 [Link to Github New Repository](https://github.com/new)
-
 
 ###Push up based on the info from Git for the new repository 
 (Choose the SSH Option to generate the commands)
@@ -73,14 +70,17 @@ git remote add origin git@github.com:bluetardis/pinteresting.git
 git push -u origin master
 ```
 
+
 ##The normal git dance
 ```
+gid add .
 git commit -am "What changed"
 git push
 ```
 
 
 
+-----
 #Creating the home page
 ```
 rails generate controller pages home
@@ -106,15 +106,18 @@ root 'pages#home'
 ```
 
 
+
 #Make a page manually
 ##Step1. Controller
 /app/controllers/pages_controller.rb
 
 edit eg copy the block from *home* and then change it to *about*
 
+
 ##Step2. The View
 /views/pages/*SOMETHING_GOES_HERE*.html.erb
 make a new file "about.html.erb"
+
 
 ##Step3. Fix the route
 /config/routes.rb
@@ -122,6 +125,9 @@ make a new file "about.html.erb"
 get "about" => "pages#about"
 
 ```
+
+
+
 
 #Embedded Ruby (.erb)
 this allows us to  include ruby in the html
@@ -177,7 +183,6 @@ Post on Twitter
 Post on Reddit
 
 ----
-
 #Make some links etc.
 Basic approach is to link to a page defined in routes.rb  get *"about"* => "pages#about"
 FYI - the general home path is *root_path*
@@ -187,6 +192,8 @@ FYI - the general home path is *root_path*
 <%= link_to "Home", root_path %>
 
 ```
+
+
 
 #Lets follow DRY and make a Navigation bar
 /views/layouts/application.html.erb
@@ -211,6 +218,7 @@ and then proceed to install as per normal.
 ```
 bundle install
 ```
+
 
 ##Add it to the Asset pipeline
 /app/assets/ is where our optimised pipeline is
@@ -237,9 +245,11 @@ So find it *CTRL-C* and then
 rails server -p $PORT -b $IP
 ```
 
+
 ##What can I do?
 Take a look at the site for live examples.
 http://getbootstrap.com/getting-started/#examples
+
 
 ##CSS Containers to make our pages responsive by default
 We are going to stick them into containers.
@@ -331,7 +341,8 @@ Plenty of sample code and pretty cool
 
 ```
 
-##Lets simplify partials to clen things up
+
+##Lets simplify partials to clean things up
 Basically this gives us a file that can be reused or stand on its own.
 
 Also improves readability.
@@ -350,6 +361,7 @@ We then need to tell Rails to include it so amend *application.html.erb* with th
 ```
 Note: we have included the layouts/header and *not* the _header.html.erb
 
+
 ## Edit the _header to your content.
 Things to change:
 *Brand
@@ -362,6 +374,7 @@ Things to change:
 * we need to tweak the code a little more to make the button etc work (responsive component when shrunk)
 * check out the code or bootstrap notes on *button* 
 
+
 ##JavaScript 
 We have a button in the bar that doesnt work.  Time to add JavaScript support for bootstrap.
 
@@ -371,6 +384,7 @@ We have a button in the bar that doesnt work.  Time to add JavaScript support fo
 ```
 //= require bootstrap
 ```
+
 
 ##Mobile Device Support
 The key word to look for is *"Viewport"*
@@ -389,7 +403,6 @@ Dont forget to stop and restart the rails server.
 
 
 ## More customisation tweaks
-
 /app/views/pages/home.html.erb
 ###wrap things in the jumbotron
 ```
