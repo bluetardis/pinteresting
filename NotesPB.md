@@ -123,6 +123,71 @@ get "about" => "pages#about"
 
 ```
 
+#Embedded Ruby (.erb)
+this allows us to  include ruby in the html
+use <%= *SOMETHING_GOES_HERE* %>
+
+Eg to make a link to another page on the site
+```
+<p>Sign up <%= link_to "here", "#" %>.</p>
+
+```
+
+----
+#A note on SEO 
+##Search Engine Optimisation
+
+* Content is important
+* Growth Mindset
+
+##Summary
+* Each page or keyword should match.   (Darling Harbour vs Sydney)
+* Use google adwords "Keyword Planner" to determine Competition vs Sweetspot.
+
+## for getting things right.
+
+###HTML Title Tag - needs to include the keywords for that page to target
+eg
+Primary Keyword - Maybe Secondary Keyword | Brand Name
+
+
+###META Tags to populate
+```title
+description
+keywords
+```
+
+
+###The URL Matters
+```
+keep the keyword in the URL rather than generalisation.
+good example is moz.com
+bad example is imdb.com
+```
+####moz.com for SEO tips
+
+###Content is important
+Length: You want at least 500 words per page for google to rank it.
+Density: Keyword density is important (how many times do you use the keywords)
+
+###Links
+Get as many links to this as possible.
+Start by having links from your home page.
+Post on Twitter
+Post on Reddit
+
+----
+
+
+
+
+
+
+
+
+
+
+
 
 
 
