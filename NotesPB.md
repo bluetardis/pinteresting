@@ -385,6 +385,39 @@ as of July 2016 it was the following lines which need to be included in the <hea
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 ```
+Dont forget to stop and restart the rails server.
+
+
+## More customisation tweaks
+
+/app/views/pages/home.html.erb
+###wrap things in the jumbotron
+```
+<div class="jumbotron">
+  <h1>Welcome to my App!</h1>
+  <p>Sign up <%= link_to "here", "#" %>.</p>
+</div>
+```
+
+###add some buttons
+CSS components in bootstrap
+http://getbootstrap.com/css/#buttons
+
+Its not complete cut and paste but close 
+example from bootstrap
+```
+<button type="button" class="btn btn-primary">Primary</button>
+```
+
+
+our code in the .html.erb
+```
+  <p>Click here to <%= link_to "Sign up", "#", class: "btn btn-primary btn-lg" %>.</p>
+```
+
+
+
+
 
 
 
@@ -424,4 +457,4 @@ as of July 2016 it was the following lines which need to be included in the <hea
 -----
 
 Starting Point is
-Day 9
+Day 11 
