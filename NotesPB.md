@@ -106,6 +106,22 @@ root 'pages#home'
 ```
 
 
+#Make a page manually
+##Step1. Controller
+/app/controllers/pages_controller.rb
+
+edit eg copy the block from *home* and then change it to *about*
+
+##Step2. The View
+/views/pages/*SOMETHING_GOES_HERE*.html.erb
+make a new file "about.html.erb"
+
+##Step3. Fix the route
+/config/routes.rb
+```
+get "about" => "pages#about"
+
+```
 
 
 
@@ -124,4 +140,6 @@ root 'pages#home'
 
 
 
-day6
+
+Starting Point is
+Day 7
