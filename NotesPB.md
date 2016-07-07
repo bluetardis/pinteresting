@@ -178,10 +178,11 @@ Post on Reddit
 
 ----
 
-
-
-
-
+#Make some links etc.
+Basic approach is to link to a page defined in routes.rb  get *"about"* => "pages#about"
+```
+<%= link_to "About", about_path %>
+```
 
 
 
@@ -207,4 +208,4 @@ Post on Reddit
 
 
 Starting Point is
-Day 7
+Day 9
