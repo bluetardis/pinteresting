@@ -14,11 +14,10 @@ rails -v
 
 
 ## Create new workspace
+(This is already done for Cloud9 if you picked a rails environment and is the ~/workspace)
 ```
 rails new pinteresting
 ```
-
-(This is already done for Cloud9 if you picked a rails environment and is the ~/workspace)
 
 
 ## Check that it actually works
@@ -27,7 +26,7 @@ rails new pinteresting
 rails server -p $PORT -b $IP
 ```
 
-
+-----
 ## Git Setup
 ### Local Config
 ```
@@ -115,12 +114,17 @@ https://pinteresting-peterbishop.c9users.io/pages/home
 We can go edit the files
 /app/views/pages/home.html.erb
 
+## fyi you can destroy pages with 
+```
+rails destroy whatever blah blah
+```
 
 
+-----
 # Set the Root Path with Routes
 We need to go tell Rails how to route pages.
 
-The file for this lives initial
+The file for this lives here
 /config/routes.rb
 and the initial line was generated when we made the home page
 
@@ -130,20 +134,34 @@ root 'pages#home'
 ```
 
 
+-----
+# Make a page manually 
+*use this to make from scratch rather than rails generate *
 
-#Make a page manually
-##Step1. Controller
+## Step1. Controller
 /app/controllers/pages_controller.rb
 
+* We need to edit this to create other pages eg about... *
+
 edit eg copy the block from *home* and then change it to *about*
+```
+def about 
+end 
+```
 
 
-##Step2. The View
+## Step2. The View
 /views/pages/*SOMETHING_GOES_HERE*.html.erb
-make a new file "about.html.erb"
+* make a new file "about.html.erb" and put something in it  *
+```
+<h1>About US</h1>
+<p>We are working on our App!</p>
+```
 
 
-##Step3. Fix the route
+
+## Step3. Fix the route 
+* This way rails can find it and do its magic stuff *
 /config/routes.rb
 ```
 get "about" => "pages#about"
@@ -151,63 +169,89 @@ get "about" => "pages#about"
 ```
 
 
-
-
-#Embedded Ruby (.erb)
-this allows us to  include ruby in the html
+-----
+# Embedded Ruby (.erb)
+this allows us to  include ruby in the html file for realtime stuff
+Ruby embeds are formatted like this:
 use <%= *SOMETHING_GOES_HERE* %>
 
-Eg to make a link to another page on the site
+In HTML, a link with a stub looks like this
+```
+<a href="#">here</a>
+```
+
+In Ruby on Rails a link will look like this
+```
+<%= link_to "here", "#" %>
+```
+
+## Use ruby to make a link to another page on the site
 ```
 <p>Sign up <%= link_to "here", "#" %>.</p>
 
 ```
 
 ----
-#A note on SEO 
-##Search Engine Optimisation
+# A note on SEO 
+* Search Engine Optimisation *
 
-* Content is important
-* Growth Mindset
+## 1. Most Important: You need to provide good content 
+SEO without good content, is bound to fail
+Sustainable strategy - Having quality traffic
 
-##Summary
+## 2. Each page targets one specific keyword (and maybe a second) 
+Figuring out what keyword to rank for requires research
+What terms are competitive?
+What are people searching for?
+Long-tail vs. Short-tail keywords
+
+### Summary
 * Each page or keyword should match.   (Darling Harbour vs Sydney)
 * Use google adwords "Keyword Planner" to determine Competition vs Sweetspot.
 
-## for getting things right.
 
-###HTML Title Tag - needs to include the keywords for that page to target
+## 3. Title Tag
+HTML Title Tag - needs to include the keywords for that page to target
 eg
 Primary Keyword - Maybe Secondary Keyword | Brand Name
+Meta tags too (like keywords, description)
 
 
-###META Tags to populate
+### META Tags to populate
 ```title
 description
 keywords
 ```
 
+## 4. The URL Matters
+### Setup with keywords
+Terms in the URL (eg. http://moz.com/learn/seo/on-page-factors)
+Not obscure numbers (eg. http://www.imdb.com/title/tt0468569/)
 
-###The URL Matters
+### keep the keyword in the URL rather than generalisation.
 ```
-keep the keyword in the URL rather than generalisation.
 good example is moz.com
 bad example is imdb.com
 ```
-####moz.com for SEO tips
 
-###Content is important
-Length: You want at least 500 words per page for google to rank it.
-Density: Keyword density is important (how many times do you use the keywords)
+#### moz.com for SEO tips
 
-###Links
-Get as many links to this as possible.
-Start by having links from your home page.
+## 5. Content is important
+### Length:
+You want at least 500 words per page for google to rank it.
+
+### Density:
+Keyword density is important (how many times do you use the keywords)
+
+### Links
+* It must link to and back from the page properly.
+Then get as many links to this as possible.
 Post on Twitter
 Post on Reddit
 
-----
-#Make some links etc.
+
+-----
+# Creating Navigation Links
 Basic approach is to link to a page defined in routes.rb  get *"about"* => "pages#about"
 FYI - the general home path is *root_path*
 
@@ -217,18 +261,25 @@ FYI - the general home path is *root_path*
 
 ```
 
+We could do this for every page however if its a common element then we probably want to do something like the following.
 
 
-#Lets follow DRY and make a Navigation bar
+
+# Navigation bar
+Make it a little bit easier for users to move around your site with navigation links. In Rails, layouts make it really easy to create something (like a navigation bar) and have it show up on every page in your app.
+
+
 /views/layouts/application.html.erb
 
 This is the template that is the "theme" or for all pages.
 
 Place this before the *<%= yield %> if you want it as a header.
 
+
 ------
-#Bootstrap
-##Install the bootstrapp-sass gem
+# Bootstrap Integration
+
+## Install the bootstrapp-sass gem
 Easiest way is to use gems.
 Search google for "bootstrap sass gem"
 
