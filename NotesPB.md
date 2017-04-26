@@ -63,6 +63,12 @@ ssh -T git@github.com
 ###If all good then go to Git and create a repository
 [Link to Github New Repository](https://github.com/new)
 
+###What Git Origin are we connected to?
+(What is the Upstream)
+```
+git remote show origin
+```
+
 ###Push up based on the info from Git for the new repository 
 (Choose the SSH Option to generate the commands)
 ```
