@@ -1,5 +1,13 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  
+    #Fix error in dev by whitelisting
+  class Application < Rails::Application
+    config.web_console.whitelisted_ips = %w( 10.240.0.0/16 122.108.59.33 )
+    #cloud9 and pb emu
+  end
+
+
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

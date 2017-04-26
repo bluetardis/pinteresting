@@ -1,4 +1,4 @@
-#Pinteresting - PB Notes
+# Pinteresting - PB Notes
 
 This is the pinteresting sample for:
 
@@ -7,13 +7,13 @@ This is the pinteresting sample for:
 by [Blue Tardis](https://bluetardis.com)
 
 
-##Check the version
+## Check the version
 ```
 rails -v
 ```
 
 
-##Create new workspace
+## Create new workspace
 ```
 rails new pinteresting
 ```
@@ -21,15 +21,15 @@ rails new pinteresting
 (This is already done for Cloud9 if you picked a rails environment and is the ~/workspace)
 
 
-##Check that it actually works
-###Start the Rails server
+## Check that it actually works
+### Start the Rails server
 ```
 rails server -p $PORT -b $IP
 ```
 
 
-##Git Setup
-###Local Config
+## Git Setup
+### Local Config
 ```
 git config --global user.name "Your Name"
 git config --global user.name #checks that your name is correct
@@ -43,33 +43,33 @@ git add . (or -A to add all)
 git commit -am "initial commit"
 ```
 
-####Recover/roll back
+#### Recover/roll back
 ```
 git checkout -f #brings us back to the last version
 ```
 
 
-##Server Config for GitHub
-###generate a key ssh (CLOUD9 already as this done)
+## Server Config for GitHub
+### generate a key ssh (CLOUD9 already as this done)
 ```
 ssh-keygen -t rsa -C "peter@bluetardis.com.au"
 ```
 
-###Test the connection
+### Test the connection
 ```
 ssh -T git@github.com
 ```
 
-###If all good then go to Git and create a repository
+### If all good then go to Git and create a repository
 [Link to Github New Repository](https://github.com/new)
 
-###What Git Origin are we connected to?
+### What Git Origin are we connected to?
 (What is the Upstream)
 ```
 git remote show origin
 ```
 
-###Push up based on the info from Git for the new repository 
+### Push up based on the info from Git for the new repository 
 (Choose the SSH Option to generate the commands)
 ```
 git remote add origin git@github.com:bluetardis/pinteresting.git
@@ -77,7 +77,7 @@ git push -u origin master
 ```
 
 
-##The normal git dance
+## The normal git dance
 ```
 gid add .
 git commit -am "What changed"
@@ -85,9 +85,27 @@ git push
 ```
 
 
-
 -----
-#Creating the home page
+# Rails WhiteList / BugFix
+
+This fixes the following error:
+Cannot render console from 122.108.59.33! Allowed networks: 127.0.0.1
+
+*Edit the /config/environments/development.rb and add this near the top*
+
+```
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
+  
+    #Fix error in dev by whitelisting
+  class Application < Rails::Application
+    config.web_console.whitelisted_ips = %w( 10.240.0.0/16 122.108.59.33 )
+    #cloud9 and pb emu
+  end
+```
+  
+-----
+# Creating the home page
 ```
 rails generate controller pages home
 ```
@@ -99,7 +117,7 @@ We can go edit the files
 
 
 
-#Set the Root Path with Routes
+# Set the Root Path with Routes
 We need to go tell Rails how to route pages.
 
 The file for this lives initial
