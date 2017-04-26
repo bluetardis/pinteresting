@@ -277,9 +277,15 @@ Place this before the *<%= yield %> if you want it as a header.
 
 
 ------
-# Bootstrap Integration
+# Bootstrap Installation and Initial Integration
 
-## Install the bootstrapp-sass gem
+## Resources
+Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
+Bootstrap 3 [Main Site Documentation](http://getbootstrap.com/): where you go after installation to look at documentation on using Bootstrap styles and components
+[rubygems.org](http://www.rubygems.org/): the official Ruby Gems site
+
+
+## Add the bootstrapp-sass gem to /Gemfile
 Easiest way is to use gems.
 Search google for "bootstrap sass gem"
 
@@ -289,13 +295,22 @@ Edit the *Gemfile*
 ```
 gem 'bootstrap-sass'
 ```
-and then proceed to install as per normal.
+
+### To install a Gem from github
+If you need to do this for some reason.
+```
+gem 'gemname', github: 'thomas-mcdonald/bootstrap-sass', branch: '3'
+```
+
+
+## Install with bundle install
+This is the best way to install any new gem.
 ```
 bundle install
 ```
 
 
-##Add it to the Asset pipeline
+## Add it to the Asset pipeline
 /app/assets/ is where our optimised pipeline is
 This has provision for images, java and stylesheets.
 
@@ -312,6 +327,15 @@ Edit this file and add the following:
 @import 'bootstrap';
 ```
 
+### What is Application.css file?
+```
+app/assets/stylesheets/application.css
+
+```
+Application.css takes all the other files in your /stylesheets directory and combines them for when you run your app.
+
+
+## Restart the server
 Initially we will get an error if you havent stopped an restarted the server.  
 Basically you need to do this anytime we touch *gems*
 
@@ -320,6 +344,8 @@ So find it *CTRL-C* and then
 rails server -p $PORT -b $IP
 ```
 
+------
+# Bootstrap Configuration
 
 ##What can I do?
 Take a look at the site for live examples.
