@@ -136,12 +136,12 @@ root 'pages#home'
 
 -----
 # Make a page manually 
-*use this to make from scratch rather than rails generate *
+*use this to make from scratch rather than rails generate*
 
 ## Step1. Controller
 /app/controllers/pages_controller.rb
 
-* We need to edit this to create other pages eg about... *
+We need to edit this to create other pages eg about...
 
 edit eg copy the block from *home* and then change it to *about*
 ```
@@ -152,7 +152,7 @@ end
 
 ## Step2. The View
 /views/pages/*SOMETHING_GOES_HERE*.html.erb
-* make a new file "about.html.erb" and put something in it  *
+*make a new file "about.html.erb" and put something in it*
 ```
 <h1>About US</h1>
 <p>We are working on our App!</p>
@@ -161,11 +161,10 @@ end
 
 
 ## Step3. Fix the route 
-* This way rails can find it and do its magic stuff *
+*This way rails can find it and do its magic stuff*
 /config/routes.rb
 ```
-get "about" => "pages#about"
-
+get "about" => "pages#about"    # create about_path
 ```
 
 
@@ -193,7 +192,7 @@ In Ruby on Rails a link will look like this
 
 ----
 # A note on SEO 
-* Search Engine Optimisation *
+*Search Engine Optimisation*
 
 ## 1. Most Important: You need to provide good content 
 SEO without good content, is bound to fail
@@ -218,7 +217,8 @@ Meta tags too (like keywords, description)
 
 
 ### META Tags to populate
-```title
+```
+title
 description
 keywords
 ```
@@ -252,13 +252,12 @@ Post on Reddit
 
 -----
 # Creating Navigation Links
-Basic approach is to link to a page defined in routes.rb  get *"about"* => "pages#about"
+Basic approach is to link to a page defined in routes.rb  get "about" => "pages#about"
 FYI - the general home path is *root_path*
 
 ```
 <%= link_to "About", about_path %> 
 <%= link_to "Home", root_path %>
-
 ```
 
 We could do this for every page however if its a common element then we probably want to do something like the following.
@@ -281,8 +280,11 @@ Place this before the *<%= yield %> if you want it as a header.
 
 ## Resources
 Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
+
 Bootstrap 3 [Main Site Documentation](http://getbootstrap.com/): where you go after installation to look at documentation on using Bootstrap styles and components
+
 [rubygems.org](http://www.rubygems.org/): the official Ruby Gems site
+
 
 
 ## Add the bootstrapp-sass gem to /Gemfile
@@ -315,7 +317,7 @@ bundle install
 This has provision for images, java and stylesheets.
 
 We will be working with stylesheets and need to make a new file.
-Using the scss precompiler framework (scss)
+Using the scss precompiler framework (.scss)
 
 The name could be anything but we need something human readable
 ```
@@ -344,19 +346,21 @@ So find it *CTRL-C* and then
 rails server -p $PORT -b $IP
 ```
 
+
 ------
 # Bootstrap Configuration
 
-##What can I do?
+## What can I do?
 Take a look at the site for live examples.
 http://getbootstrap.com/getting-started/#examples
 
+*This includes templates*
 
-##CSS Containers to make our pages responsive by default
+
+##Note: We need CSS Containers to make our pages responsive by default
 We are going to stick them into containers.
 So reference here: and look for the container example
 http://getbootstrap.com/css/#type
-
 
 Use .container for a responsive fixed width container.
 
@@ -373,11 +377,94 @@ Use .container-fluid for a full width container, spanning the entire width of yo
 </div>
 ```
 
-We are going to use *.container* and add the info to *application.html.erb* above and below the *<%= yield %>* so it affects our pages.
+
+### 1. Add a container to your app!
+We are going to use *.container* and add the info to *views/layouts/application.html.erb* above and below the *<%= yield %>* so it affects our pages.
 /views/layouts/application.html.erb
 
 
-##NavBar
+*views/layouts/application.html.erb*
+
+```
+     <%= link_to "Home", root_path %>
+     <%= link_to "About", about_path %>
+     <div class="container">
+          <%= yield %>
+     </div>
+```
+
+
+### 2. Create a _header.html.erb partial (prep for the NAV Bar)
+Its good practice to use partials so we dont have super cluttered files.  
+
+It also allows code to be reused.
+They always start with an _
+
+
+We are going to start that now as otherwise the code for the Nav Bar will be crazy.
+
+Create the file *app/views/layouts/_header.html.erb*
+
+#### Notes on *Partials*
+Basically this gives us a file that can be reused or stand on its own.
+
+Also improves readability.
+
+Make a new file in layouts and start it with an "_" 
+
+In this case our file will be *_header.html.erb*
+
+The *_* means its a partial and will be included as needed.
+
+Move (Cut and Paste) the Navigation bar example we just put in *application.html.erb* 
+
+We then need to tell Rails to include it so amend *application.html.erb* with the following based on where you want the partial you just made.
+```
+<%= render 'layouts/header' %>
+```
+Note: we have referenced it as "layouts/header" and *not*  "_header.html.erb"
+
+
+
+
+### 3. Create link to partial
+app/views/layouts/application.html.erb
+```
+     <%= render 'layouts/header' %>
+```
+This replaces our previous Home and About info and comes before the main app container with the yield statement.
+
+
+#### 4. Add the nav bar
+This is an abbreviated version of the sample code with a few small changes incorporating our original ruby.  Again refer to the Bootstrap site for examples.
+
+*app/views/layouts/_header.html.erb*
+
+```
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Pinteresting</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "About", about_path %></li> 
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+```
+
+
+##### The complete original file.
 This is under the *Components* part of bootstrap so go find some examples.
 
 http://getbootstrap.com/components/#navbar
@@ -443,32 +530,68 @@ Plenty of sample code and pretty cool
 ```
 
 
-##Lets simplify partials to clean things up
-Basically this gives us a file that can be reused or stand on its own.
+### 5. Require Bootstrap's JavaScript
+On the bootstrap pages, it calles out there there are *Plugin Dependency* requirements so we need to add them to ensure functionality.  
+In this case its to support the Nav Links as the width shrinks and Bootstrap displays a Hamburger for Navigation.
 
-Also improves readability.
+*app/assets/javascripts/application.js*
 
-Make a new file in layouts and start it with an "_" 
+The actual link needed is //= require bootstrap-sprockets
 
-In this case our file will be *_header.html.erb*
 
-The *_* means its a partial and will be included as needed.
-
-Move (Cut and Paste) the Navigation bar example we just put in *application.html.erb* 
-
-We then need to tell Rails to include it so amend *application.html.erb* with the following based on where you want the partial you just made.
 ```
-<%= render 'layouts/header' %>
+...
+//= require jquery
+//= require jquery_ujs
+//= require bootstrap-sprockets
+//= require turbolinks
+//= require_tree .
 ```
-Note: we have included the layouts/header and *not* the _header.html.erb
 
+
+### 6. Add viewport (Mobile Devices/IE Support)
+We need to add a viewport to make it work nicely for mobile devices or Internet Explorer.
+
+*views/layouts/application.html.erb*
+```
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
+its important as to the order where these files go.  Here is a more complete example.
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    ...
+```
+
+### 7. Home Page: Jumbotron and Button Example
+
+*views/pages/home.html.erb*
+
+```
+<div class="jumbotron">
+	<h1>Welcome to my app!</h1>
+  <p>Click here to <%= link_to "Sign up", "#", class: "btn btn-primary btn-lg" %></p>
+</div>
+```
+
+
+
+-----
+
+# Whats typical to customise Bootstrap Configuration
 
 ## Edit the _header to your content.
 Things to change:
-*Brand
-*Remove search if you dont need it (<form to /form>)
-*Populate or delete links on left or right hand sides.
-*Same code as before
+* Brand
+* Remove search if you dont need it (<form to /form>)
+* Populate or delete links on left or right hand sides.
+* Same code as before
 
 ###Notes:
 * we simplified this a lot for our project. Refer to the _header.html.erb
@@ -476,18 +599,17 @@ Things to change:
 * check out the code or bootstrap notes on *button* 
 
 
-##JavaScript 
+## JavaScript and other Dependencies
 We have a button in the bar that doesnt work.  Time to add JavaScript support for bootstrap.
 
 /app/assets/javascripts/application.js
 *We need to include the Bootstrap components and will do this AFTER jquery lines*
-
 ```
 //= require bootstrap
 ```
 
 
-##Mobile Device Support
+## Mobile Device Support
 The key word to look for is *"Viewport"*
 http://getbootstrap.com/getting-started/
 
@@ -503,7 +625,7 @@ as of July 2016 it was the following lines which need to be included in the <hea
 Dont forget to stop and restart the rails server.
 
 
-## More customisation tweaks
+## Jumbotron
 /app/views/pages/home.html.erb
 ###wrap things in the jumbotron
 ```
@@ -513,7 +635,7 @@ Dont forget to stop and restart the rails server.
 </div>
 ```
 
-###add some buttons
+###Buttons
 CSS components in bootstrap
 http://getbootstrap.com/css/#buttons
 
@@ -526,49 +648,9 @@ example from bootstrap
 
 our code in the .html.erb
 ```
-  <p>Click here to <%= link_to "Sign up", "#", class: "btn btn-primary btn-lg" %>.</p>
+  <p>Click here to <%= link_to "Sign up", "#", class: "btn btn-primary btn-lg" %></p>
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -----
 
-Starting Point is
-Day 11 
+
