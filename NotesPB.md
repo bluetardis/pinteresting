@@ -348,7 +348,7 @@ rails server -p $PORT -b $IP
 
 
 ------
-# Bootstrap Configuration
+# Bootstrap Customization Part1
 
 ## What can I do?
 Take a look at the site for live examples.
@@ -652,5 +652,66 @@ our code in the .html.erb
 ```
 
 -----
+# Bootstrap Customization Part2
+
+## Design Resources
+
+[Variables](http://getbootstrap.com/customize/#variables-basics)
+[FlatUI Colors](http://flatuicolors.com/)
+
+Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
+
+### Notes
+We will be working with app/assets/stylesheets/bootstrap_and_customization.css.scss file
+
+
+The Variables link above shows the various variables we can change/customise.  For now we are going to select and manually overwrite the ones we need.
+We need to comvest the @navbar-default-bg shown into $navbar-default-bg
+
+We enter the variable and the new value BEFORE we @import 'bootstrap'; 
+
+## Example
+```
+$body-bg: #white;
+
+$font-size-base: 14px;
+
+$brand-primary: #47a1f8;
+
+$headings-color: #47a1f8;
+
+$navbar-inverse-bg: #47a1f8;
+$navbar-inverse-link-color: white;
+
+$jumbotron-bg: #f6fafd;
+$jumbotron-heading-color: #47a1f8;
+$jumbotron-font-size: ceil(($font-size-base * 1.3));
+$jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
+
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+```
+
+The variables site in resources shows the variables can be used to determine the variable name of what we want to change for anything in Bootstrap
+
+## Navigation bar Alernative
+app/views/layouts/_header.html.erb
+```
+<nav class="navbar navbar-inverse navbar-default" role="navigation">
+```
+
+
+## Custom Styles Example
+app/assets/stylessheets/bootstrap_and_customization.css.scss
+```
+$body-bg: #ecf0f1;
+$navbar-inverse-bg: #27ae60;
+$navbar-inverse-link-color: white;
+$brand-primary: #f39c12;
+$jumbotron-bg: #bdc3c7;
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+```
 
 
