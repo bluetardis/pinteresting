@@ -436,7 +436,8 @@ This replaces our previous Home and About info and comes before the main app con
 
 
 #### 4. Add the nav bar
-This is an abbreviated version of the sample code with a few small changes incorporating our original ruby.  Again refer to the Bootstrap site for examples.
+This is an abbreviated version of the sample code with a few small changes incorporating our original ruby.  
+Again refer to the Bootstrap site for examples.
 
 *app/views/layouts/_header.html.erb*
 
@@ -703,7 +704,7 @@ app/views/layouts/_header.html.erb
 
 
 ## Custom Styles Example
-app/assets/stylessheets/bootstrap_and_customization.css.scss
+app/assets/stylesheets/bootstrap_and_customization.css.scss
 ```
 /*
 $body-bg: #white;
@@ -764,4 +765,53 @@ $jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
 ```
 
 
+## Fonts
+* Go to here:  [Google Fonts](https://www.google.com/fonts)
+* Add the fonts you want to your collection
+* Choose to Embed
+* Use the *Import* styles
+* Import as per example at the top of the scss
+```
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+```
+* Name / use the font as speficied in the google info
+```
+$font-family-sans-serif:           'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+```
 
+## Nav Bar within Container
+*apps/views/layouts/_header.html.erb*
+This gives more control on formatting et
+```
+<nav class="navbar navbar-inverse navbar-default" role="navigation">
+  <div class="container-fluid">     <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">     <!-- NavBar -->
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" <%= link_to "pinteresting", root_path %></a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "About Us", about_path %></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+```
+
+
+## Add a "center Class"
+*/app/assets/stylesheets/bootstrap_and_customization.css.scss*
+You could use this to center elements as desired eg instead of a class="jumbotron", you could make class="jumbotron center" which would center everything.
+
+```
+.center {
+  text-align: center;
+}
+```
