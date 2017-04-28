@@ -705,14 +705,63 @@ app/views/layouts/_header.html.erb
 ## Custom Styles Example
 app/assets/stylessheets/bootstrap_and_customization.css.scss
 ```
-$body-bg: #ecf0f1;
-$navbar-inverse-bg: #27ae60;
+/*
+$body-bg: #white;
+white
+f6fafd lightest grey
+a8c7ec slate grey
+ced5eb light grey
+47a1f8 nice blue
+e9d5e0 light pink
+d1c7d7 pink grey
+d192a1 dark pink
+black
+
+*/
+$body-bg: #white;
+
+$font-size-base: 14px;
+
+$brand-primary: #47a1f8;
+
+$headings-color: #47a1f8;
+
+$navbar-inverse-bg: #47a1f8;
 $navbar-inverse-link-color: white;
-$brand-primary: #f39c12;
-$jumbotron-bg: #bdc3c7;
+$navbar-default-bg: #47a1f8;
+$navbar-default-link-color: white;
+$navbar-default-brand-color: white;
+
+$jumbotron-bg: #f6fafd;
+$jumbotron-heading-color: #47a1f8;
+$jumbotron-font-size: ceil(($font-size-base * 1.3));
+$jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
+
+
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
+
+.center {
+  text-align: center;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  }
+
+.navbar-inverse .navbar-toggle {
+  background-color: #ced5eb; /* Icon Background Color */
+  border-color: #ced5eb; /* border color or transparent */
+  float: right; /* Move navbar toggle to left, right etc */
+}
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: white; /* Whatever colour you want for icon lines */
+}
+.navbar-inverse .navbar-toggle .icon-bar:hover {
+  background-color: #47a1f8; /* Changes toggle color on hover for lines if needed*/
+}
+
 ```
 
 
-      <a class="navbar-brand" href="#">Pinteresting</a>
+
