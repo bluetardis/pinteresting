@@ -715,3 +715,4 @@ $jumbotron-bg: #bdc3c7;
 ```
 
 
+      <a class="navbar-brand" href="#">Pinteresting</a>
