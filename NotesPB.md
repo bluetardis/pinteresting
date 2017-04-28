@@ -815,3 +815,51 @@ You could use this to center elements as desired eg instead of a class="jumbotro
   text-align: center;
 }
 ```
+
+-----
+# Heroku etc
+
+## Resources
+https://www.heroku.com/
+https://toolbelt.heroku.com/
+
+## Update Heroku Toolbelt in Cloud9
+```
+wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+sudo apt-get update; sudo apt-get install heroku-toolbelt heroku
+```
+
+## Login to Heroku
+```
+heroku login
+```
+
+## Add ssh keys
+```
+heroku keys:add
+```
+
+## Create a new APP
+```
+heroku create 
+```
+
+## Clean up Gems for Dev vs Prod
+*/gemfile*
+
+You may need to frig around a little more if you have duplicate entries for sqlite3 etc
+
+```
+group :development, :test do
+     gem 'sqlite3'
+end
+
+group :production do
+     gem 'pg'
+     gem 'rails_12factor'
+end
+```
+
+## install
+bndle install --without production
+
