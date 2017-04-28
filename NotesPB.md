@@ -839,7 +839,7 @@ heroku login
 heroku keys:add
 ```
 
-## Create a new APP
+## Create a new heroku app
 ```
 heroku create 
 ```
@@ -861,5 +861,29 @@ end
 ```
 
 ## install
-bndle install --without production
+install and update but dont add PG locally.
+
+*Once you run the bundle install --without production it will remember this for your environment in future*
+
+```
+bundle install --without production
+```
+
+## Git Deployment (update then push to heroku)
+```
+git add .
+gitcommit -am "prep for Heroku or something meaningful"
+git push master
+git push heroku master
+```
+
+
+## rename our Heroku app
+```
+heroku rename NewNameGoes here ##eg pinteresting123
+```
+
+This ends up [here](https://pinteresting123.herokuapp.com)
+
+-----
 
