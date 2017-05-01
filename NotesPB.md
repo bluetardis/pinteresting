@@ -12,6 +12,15 @@ by [Blue Tardis](https://bluetardis.com)
 rails -v
 ```
 
+### Reinstall (if needed eg rails broken)
+You need to specify the version.
+```
+rvm reinstall ruby-2.3.4
+```
+See here for some hints on troubleshooting
+https://rvm.io/rubies/default
+
+
 
 ## Create new workspace
 (This is already done for Cloud9 if you picked a rails environment and is the ~/workspace)
@@ -885,5 +894,47 @@ heroku rename NewNameGoes here ##eg pinteresting123
 
 This ends up [here](https://pinteresting123.herokuapp.com)
 
+
+## Open our app
+Open in our local browser if we can.
+This WONT work in cloud9
+
+To do this you need to use heroku domains.
+
+```
+heroku open
+```
+
 -----
+
+# DNS Setup and Hosting 
+
+If needed.  Otherwise you can come back to this.
+
+Customize your domain name in less than 5 minutes with *DNSimple*
+
+## 1. Signup for an account at DNSimple
+Free 6 month trial with the guys over at DNSimple exclusively for One Month Rails students. Enjoy!
+
+Sign up for DNSimple 
+(make sure to use the link: https://dnsimple.com/o/one-month-rails for the discount) 
+
+## 2. Add your domain to Heroku
+You can either do this in the terminal, or via heroku.com 
+
+### Option 1: terminal (CLI)
+You need to add both the core and www. domain
+```
+heroku domains #shows you the domains you have on heroku 
+heroku domains:add omr-pinteresting.com 
+heroku domains:add www.omr-pinteresting.com 
+```
+
+### Option 2: Heroku.com (Web Dashboard)
+* Go to your Heroku Dashboard
+* Choose your app and click "Settings"
+* Enter your domain and click "Add"
+* Note: Heroku now wants a credit card number before adding a custom domain to your app. 
+
+
 
