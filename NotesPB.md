@@ -1188,4 +1188,97 @@ Note that we are having to use a *method :delete* as the REST option for logout
 
 ```
 
+-----
+
+# Enforcing Strong Passwords
+We need to ensure we can enforce stronger (than default) passwords.
+
+## 1. Add a format validator to the password field
+1. Let's add a requirement that all new passwords have some complexity requirements
+2. By adding a regular expression to the password field in the user model. A regular expression is a way to check and see if certain characters are present in a string. You can learn more about regular expressions [here](http://en.wikipedia.org/wiki/Regular_expression)
+3. In the User model, we want to add a password validator (we didn't have one before) and a :format field for the password:
+*app/models/user.rb*
+
+```
+validates :password, :presence => true,
+                     :on => :create,
+                     :format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\Z/ }
+```
+                     
+### Notes
+*Notice that we don't have the following as they aren't needed:*
+
+:confirmation => true // We don't have a password confirmation on our pinteresting app so this does nothing.
+
+:length => // We don't need this because it gets set in the devise initializer at config/initializer/devise.rb
+
+
+
+## 2. Regular expressions
+Here is the regular expression we are using:
+```
+/\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A=Z])(?=.*[\@\#\$\%\^\&\+\=]).*\Z/
+```
+
+
+## 3. Understanding Regular Expressions.
+*Let's break this down into smaller pieces so we can understand it...
+*Let's start with the beginning and the end
+*Regular expressions exists between two forward slashes, and anything in between is what we want to match. Check this out:
+```
+/ this is what we match between the forward slashes / 
+```
+
+Next, we want to make sure we match everything in the string, starting from the very beginning all the way to the end, so we include the following two special regular expression characters:
+
+```
+/\A this is what we match between the forward slashes \Z/ 
+```
+Everything else in our regular expression is grouped in (). 
+Let's look at each of these groups individually. 
+One thing you will notice is the following construct:
+```
+(?=.*   SOMETHING WE WANT TO MATCH   )
+```
+
+How this works is that is creates a group which is "looking ahead" in the string to match "SOMETHING WE WANT TO MATCH".  These look forward in the string to identify a pattern, matching anything (.) zero or more times followed by whatever we want to match.  We reuse this over and over in our regular expression to match different things, like numbers, special characters, etc. 
+
+* First, we match for at least 10 characters:
+```
+(?=.{10,})
+```
+
+* Next, we match for digits (numbers), using "\d":
+```
+(?=.*\d)
+```
+
+* Then, we match a lowercase alphabet character:
+```
+(?=.*[a-z])
+```
+
+* And then we match an uppercase alphabet character:
+```
+(?=.*[A-Z])
+```
+
+* This code matches a special character.  Note how each special character needs to be escaped using the "\" character:
+```
+(?=.*[\@\#\$\%\^\&\+\=])
+```
+
+1. Now, when we put those together, we ensure passwords are at least 10 characters long, contains a number,  a lowercase and uppercase letter, as well as a special character.
+2. A great site to use to test and learn more about ruby regular expressions is rubular.
+3. One thing to keep in mind when building regular expressions is that since you probably won't build them all the time, it can be a pain to remember how to do it correctly. I frequently use rubular and examples on the internet as references 
+4. Edit the above as needed based on site...
+
+## 4. Testing our changes
+* On the homepage click on the ‘sign up’ button
+* Try to sign up with a user with a weak password
+* Click on ‘submit’ and you’ll get the message ‘password is invalid’, meaning our complexity requirements work!
+* It's probably a good idea to update the sign up page to tell users we require strong passwords!
+* 
+* -----
+* 
     
