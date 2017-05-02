@@ -860,6 +860,13 @@ heroku keys:add
 heroku create 
 ```
 
+## Heroku Database Stuff
+```
+heroku rake db:reset
+
+heroku rake db:migrate
+```
+
 ## Clean up Gems for Dev vs Prod
 */gemfile*
 
