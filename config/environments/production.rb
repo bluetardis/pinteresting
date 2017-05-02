@@ -78,6 +78,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   # Mailer for Devise
-  config.action_mailer.default_url_options = { host: 'http://pinteresting123.herokuapp.com/' }
+  config.action_mailer.default_url_options = { host: 'https://pinteresting123.herokuapp.com' }
 
 end
