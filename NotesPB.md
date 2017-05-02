@@ -863,9 +863,14 @@ heroku create
 ## Heroku Database Stuff
 ```
 heroku rake db:reset
-
 heroku rake db:migrate
 ```
+
+## Heroku Logs
+```
+heroku logs --tail
+```
+
 
 ## Clean up Gems for Dev vs Prod
 */gemfile*
