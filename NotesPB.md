@@ -1,11 +1,15 @@
-# Pinteresting - PB Notes
+# OneMonth - PB Notes
 
 This is the pinteresting sample for:
 
-[Pinteresting](https://pinteresting-peterbishop.c9users.io)
+[Pinteresting C9](https://pinteresting-peterbishop.c9users.io)
+
+[Pinteresting Heroku](http://pinteresting123.herokuapp.com)
 
 by [Blue Tardis](https://bluetardis.com)
 
+-----
+# Ruby
 
 ## Check the version
 ```
@@ -15,7 +19,7 @@ rails -v
 ### Reinstall (if needed eg rails broken)
 You need to specify the version.
 ```
-rvm reinstall ruby-2.3.4
+rvm reinstall ruby-2.3.0
 ```
 See here for some hints on troubleshooting
 https://rvm.io/rubies/default
@@ -36,6 +40,7 @@ rails server -p $PORT -b $IP
 ```
 
 -----
+# GIT
 ## Git Setup
 ### Local Config
 ```
@@ -51,13 +56,15 @@ git add . (or -A to add all)
 git commit -am "initial commit"
 ```
 
-#### Recover/roll back
+
+#### How to Recover/roll back
+*In case we stuff something up somewhere*
 ```
 git checkout -f #brings us back to the last version
 ```
 
 
-## Server Config for GitHub
+## Server Config for GitHub etc.
 ### generate a key ssh (CLOUD9 already as this done)
 ```
 ssh-keygen -t rsa -C "peter@bluetardis.com.au"
