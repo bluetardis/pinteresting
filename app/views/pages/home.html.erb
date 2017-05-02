@@ -2,8 +2,17 @@
   <h1>Welcome</h1>
   <p>Spicy jalapeno bacon ipsum dolor amet jowl dolor eu andouille turducken ribeye adipisicing meatloaf burgdoggen labore. Aliqua salami in hamburger pork chop dolore. Ut prosciutto in boudin, pariatur est dolore. Excepteur ut ham short loin ad laborum pork loin meatball short ribs. Ham et velit tenderloin beef ribs. Lorem turducken meatball, duis bresaola meatloaf fugiat ut mollit tri-tip tempor pig minim.
 </p>
-  <p>
-    <%= link_to "Log in", "#",  class: "btn btn-default btn-lg" %>
-    <%= link_to "Sign up", "#", class: "btn btn-primary btn-lg" %>
-  </p>
+
+  <% if user_signed_in? %>
+    <!== do something for our signed in users -->
+    <p></p>  
+    <p>Thanks for signing in :-)</p>    
+  <% else %>
+    <!== Prompt them to Login or SignUp -->
+    <p></p>
+    <p>
+      <%= link_to "Log in", new_user_session_path,  class: "btn btn-default btn-lg" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+    </p>
+  <% end %>  <!== user_sign_in block -->
 </div>

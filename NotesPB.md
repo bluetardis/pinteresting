@@ -944,4 +944,248 @@ heroku domains:add www.omr-pinteresting.com
 * Note: Heroku now wants a credit card number before adding a custom domain to your app. 
 
 
+-----
+# Devise Installation
+*User authentication gem for rails*
 
+## Resources
+* Devise Documentation: https://github.com/plataformatec/devise
+* RubyGems: http://rubygems.org
+
+ 
+## 1. Make sure you are using the correct version of Ruby in your Gemfile
+### Terminal
+```
+ruby -v
+```
+Should return Ruby 2.1.2 or higher - use whatever it returns in your Gemfile.
+
+
+### Gemfile
+```
+source 'https://rubygems.org'
+ruby '2.1.2' #whatever was above
+```
+
+
+## 2. Add the Devise gem
+### Gemfile
+```
+gem 'devise'
+```
+
+### Terminal / Installing Devise 
+
+```
+bundle install
+```
+
+
+## 3. Install Devise 
+We are following the readme from the devise github page
+```
+rails generate devise:install
+```
+This will then give us some steps to follow.
+
+### Devise secret key
+Pinterest/config/initializers/devise.rb
+
+If devise asks or says it cannot find a secret key, copy and paste the key the terminal gives you and place it in your devise.rb like so:
+
+terminal
+
+```
+Devise.setup do |config|
+# The secret key used by Devise. Devise uses this key to generate
+# random tokens. Changing this key will render invalid all existing
+# confirmation, reset password and unlock tokens in the database.
+  config.secret_key = "Enter key here if it doesn't exist"
+# -
+# -
+# etc
+end
+```
+
+
+## 4. Setting up Devise
+
+These are the steps needed to get it installed on our app.  These come from the information provided to the terminal window after the prior step (Installing Devise)
+
+### 1. Default URLs
+We are going to add these to the bottom of the following files.
+NOTE: This needs to be amended to suite our actual server etc.
+*config/environments/development.rb*
+```
+config.action_mailer.default_url_options = { host: 'localhost', port: 8080 }
+```
+
+
+*config/environments/production.rb*
+NOTE: This needs to be amended to suite our actual server etc. eg Heroku Name
+```
+config.action_mailer.default_url_options = { host: 'http://pinteresting123.herokuapp.com/' }
+```
+
+
+### 2. Set "Home" route
+We've already set our home route. Check it out yourself:
+config/routes.rb
+
+```
+root "pages#home"
+```
+
+
+### 3. Flash message
+
+Flash messages are the messages on Websites that say "Thanks for log in" or "Thanks for signing up"
+We are going to place this in the container before the YIELD
+
+The following code makes a ruby block.
+for each flash 
+  do something 
+end
+
+#### Embedded ruby run vs display
+<%= Will run embedded ruby and DISPLAY to the web client
+<%  Will run embedded ruby but NOT show anything.
+
+
+*app/views/layouts/application.html.erb*
+```
+<% flash.each do |name, msg| %>
+     <%= content_tag(:div, msg, class: "alert alert-info") %>
+<% end %>
+```
+
+### 4. Set precompile to "false" 
+This is good practice for Heroku etc, and should save us some error messages in future
+
+We want to place it within the Application Class, right at the end (before the end)
+
+*config/application.rb*
+
+```
+config.assets.initialize_on_precompile = false
+```
+
+### 5. Install the Devise views
+From the terminal terminal
+```
+rails generate devise:views
+```
+This will generate within the app/views/devise the pages we need to support authentication.
+
+-----
+
+# Devise Configuration and our Rails app
+Again this is following the readme from the github gem for devise.
+
+## 1. Generate a User model
+```
+rails generate devise user
+```
+This line above creates a User model for us and a new file: *app/models/user.rb*
+
+The model interacts with our database
+Go to db/migration and see the files there should be something like db/migration/20130922022322_devise_create_users.rb #the number is the date you create it
+
+### Q: Did you make a mistake generating a model?
+```
+rails destroy devise user #deletes the generate command in case you made a mistake
+```
+
+
+## 2. Migrate your database
+```
+rake db:migrate
+```
+This command takes the migration file and runs it, so that it generates tables in your database
+We will also need to migrate in heroku.
+
+
+## 3. Restart your server
+CONTROL + C to Stop the Server 
+```
+rails server -p $PORT -b $IP
+```
+You'll need to restart your application each time you install a gem or each time you run $rake db:migrate
+
+-----
+# Rails Configuration - New User Signup and Signin
+
+## Find all your paths
+```
+rake routes
+```
+This lists all the paths available to your application.
+
+Sessions cover user sessions (when logged in etc.)
+Passwords 
+Registration.
+
+
+
+## 1. Update your Home view
+*app/views/pages/home.html.erb*
+
+### First: fix the stubbed out paths. 
+We can get these from the rake route command but we will need to add _path at the end
+signup: new_user_registration_path
+login: new_user_session_path
+
+
+### Second: Add some logic to the page about the user status
+*Read the Controller Filters and Helpers in the Devise readme from github*
+if the user has signed in
+  do something 
+else
+  do something different
+end
+
+
+```
+<div class="jumbotron">
+  <h1>Welcome</h1>
+  <p>Spicy jalapeno bacon ipsum dolor amet jowl dolor eu andouille turducken ribeye adipisicing meatloaf burgdoggen labore. Aliqua salami in hamburger pork chop dolore. Ut prosciutto in boudin, pariatur est dolore. Excepteur ut ham short loin ad laborum pork loin meatball short ribs. Ham et velit tenderloin beef ribs. Lorem turducken meatball, duis bresaola meatloaf fugiat ut mollit tri-tip tempor pig minim.
+</p>
+
+  <% if user_signed_in? %>
+    <!== do something for our signed in users
+    <p></p>  
+    <p>Thanks for signing in :-)</p>    
+  <% else %>
+    <!== Prompt them to Login or SignUp
+    <p></p>
+    <p>
+      <%= link_to "Log in", new_user_session_path,  class: "btn btn-default btn-lg" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+    </p>
+  <% end %>  <!== user_sign_in block
+</div>
+```
+
+
+## 2. Update your header partial
+*app/views/layout/_header.html.erb*
+We want to update the header to include Logout or signout as appropriate
+
+Note that we are having to use a *method :delete* as the REST option for logout 
+(we can get this from the rake routes and see its a DELETE not a GET)
+
+```
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "About Us", about_path %></li>
+        <!-- Show a signin or logout as appropriate -->
+        <% if user_signed_in? %>
+            <li><%= link_to "Log out", destroy_user_session_path, method: :delete %></li>
+        <% else %>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+        <% end %> <!-- logic for user session -->
+      </ul>
+
+```
+
+    

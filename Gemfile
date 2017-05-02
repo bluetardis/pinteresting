@@ -23,6 +23,9 @@ gem 'jbuilder', '~> 2.0'
 #Gems for bootstrapp
 gem 'bootstrap-sass'
 
+#Gems for User Authentication
+gem "devise" 
+
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
