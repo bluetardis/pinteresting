@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
                         :on => :create,
                         #:format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\Z/ }
                         :format => {:with => /\A.*(?=.{08,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*\Z/ }
-
+                        
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 end

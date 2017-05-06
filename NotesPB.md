@@ -1383,7 +1383,7 @@ Use Bootstrap to make the forms look better
 ### Resource: [BootStrap Forms](http://getbootstrap.com/css/#forms)
 
 ### Make the Form Nicer
-#### 1. Wrap a ```<div class="form-group">```  around the *INPUT* fields.
+#### 1. Wrap a ```<div class="form-group">```  around the *INPUT* fields and also the *BUTTONS*.
 There will probable already be something like ```<div class="field">``` and we need to change it to ```<div class="form-group">```
 
 *If you are adding new then you will need to include the ```</div>``` at the end of the field.*
@@ -1400,11 +1400,67 @@ to be
 <%= f.email_field :email, autofocus: true, class: "form-control" %>
 ```
 
+#### 3. Style our Buttons eg add ```class="btn btn-primary"``` to our *BUTTON* fields.
+
+Here we are using embedded ruby so we need to change
+```
+<%= f.submit "Sign up" %>
+``` 
+to be 
+```
+<%= f.submit "Sign up", class: "btn btn-primary" %>
+
+```
+
+#### 4. Add some Panels to make the form look better
+
+*Need to wrap the whole form in it*
+
+##### Basic Panel
+```
+<div class="panel panel-default">
+  <div class="panel-body">
+    Basic Panel Example
+  </div>
+</div>
+```
+  
+##### Basic Panel with a heading
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1>My Panel Heading</h1>
+  </div>
+  <div class="panel-body">
+    Something else here
+  </div>
+</div>
+```
+  
+##### Basic Panel with a heading and footer
+```
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h1>My Panel Heading</h1>
+  </div>
+
+  <div class="panel-body">
+    Something else here
+  </div>
+
+  <div class="panel-footer">
+    <h6>Blah Blah Blah!</h6>
+  </dev>
+</div>
+```
+  
+
 
 ##### Notes on *HASH_ROCKETS* and *COLONS*
 We have added the class: at the end of the embedded ruby command.
 
-Also as we are using Ruby / Rails 3 or greater we can use either *HASH_ROCKETS* or *COLONS*
+Also as we are using Ruby 1.9.2 or greater we can use either *HASH_ROCKETS* or *COLONS*
 
 For example:
 
@@ -1417,7 +1473,26 @@ autofocus: true
 :autofocus ==> true
 ```
 
-*Below are some example files.*
+##### Form Error Messages
+
+*minimum_password_length*
+Needs to be investigated - possibly set this as follows in the Views Controller
+*/app/*
+```
+@minimum_password_length = User.password_length.min
+```
+**PB Fix**
+remove the following code in the form as we are covering it in the *models/user.rb*
+```
+    <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %>
+```
+
+
+
+
+*Below are some example files with all changes.*
 
 #### app/views/devise/registrations/new.html.erb
 ```
