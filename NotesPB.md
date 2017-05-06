@@ -1658,7 +1658,7 @@ remove the following code in the form as we are covering it in the *models/user.
       </div>
 
       <div class="form-group">
-        <div class="checkbox">
+        <div class="help-block">
           <%= f.check_box :remember_me %>
           <%= f.label :remember_me %>
         </div>
