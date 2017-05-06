@@ -64,6 +64,7 @@ git checkout -f #brings us back to the last version
 ```
 
 
+
 ## Server Config for GitHub etc.
 ### generate a key ssh (CLOUD9 already as this done)
 ```
@@ -79,7 +80,7 @@ ssh -T git@github.com
 [Link to Github New Repository](https://github.com/new)
 
 ### What Git Origin are we connected to?
-(What is the Upstream)
+*(What is the Upstream)*
 ```
 git remote show origin
 ```
@@ -104,10 +105,13 @@ git push
 # Rails WhiteList / BugFix
 
 This fixes the following error:
+```
 Cannot render console from 122.108.59.33! Allowed networks: 127.0.0.1
 
-*Edit the /config/environments/development.rb and add this near the top*
+```
 
+
+*Edit the /config/environments/development.rb and add this near the top*
 ```
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -128,20 +132,19 @@ This makes a homepage for us at
 https://pinteresting-peterbishop.c9users.io/pages/home
 
 We can go edit the files
-/app/views/pages/home.html.erb
+*/app/views/pages/home.html.erb*
 
 ## fyi you can destroy pages with 
 ```
 rails destroy whatever blah blah
 ```
 
-
 -----
 # Set the Root Path with Routes
 We need to go tell Rails how to route pages.
 
 The file for this lives here
-/config/routes.rb
+*/config/routes.rb*
 and the initial line was generated when we made the home page
 
 The home page is actually called the Root Route so we need to add that.  There are hints in the file itself.
@@ -155,7 +158,7 @@ root 'pages#home'
 *use this to make from scratch rather than rails generate*
 
 ## Step1. Controller
-/app/controllers/pages_controller.rb
+*/app/controllers/pages_controller.rb*
 
 We need to edit this to create other pages eg about...
 
@@ -167,18 +170,20 @@ end
 
 
 ## Step2. The View
-/views/pages/*SOMETHING_GOES_HERE*.html.erb
-*make a new file "about.html.erb" and put something in it*
+*/views/pages/SOMETHING_GOES_HERE.html.erb*
+
+make a new file eg "about.html.erb" and put something in it
 ```
-<h1>About US</h1>
+<h1>About Us</h1>
 <p>We are working on our App!</p>
 ```
 
 
 
 ## Step3. Fix the route 
-*This way rails can find it and do its magic stuff*
-/config/routes.rb
+This way rails can find it and do its magic stuff
+
+*/config/routes.rb*
 ```
 get "about" => "pages#about"    # create about_path
 ```
@@ -186,9 +191,12 @@ get "about" => "pages#about"    # create about_path
 
 -----
 # Embedded Ruby (.erb)
-this allows us to  include ruby in the html file for realtime stuff
-Ruby embeds are formatted like this:
-use <%= *SOMETHING_GOES_HERE* %>
+Embedded Ruby allows us to include ruby in the html file for realtime stuff
+Ruby embeds are wrapped up like this with the *<%=  command  %>*
+```
+<%= *SOMETHING_GOES_HERE* %>
+```
+
 
 In HTML, a link with a stub looks like this
 ```
@@ -201,6 +209,7 @@ In Ruby on Rails a link will look like this
 ```
 
 ## Use ruby to make a link to another page on the site
+We will add the routes later.
 ```
 <p>Sign up <%= link_to "here", "#" %>.</p>
 
@@ -212,13 +221,14 @@ In Ruby on Rails a link will look like this
 
 ## 1. Most Important: You need to provide good content 
 SEO without good content, is bound to fail
+
 Sustainable strategy - Having quality traffic
 
 ## 2. Each page targets one specific keyword (and maybe a second) 
-Figuring out what keyword to rank for requires research
-What terms are competitive?
-What are people searching for?
-Long-tail vs. Short-tail keywords
+* Figuring out what keyword to rank for requires research
+* What terms are competitive?
+* What are people searching for?
+* Long-tail vs. Short-tail keywords
 
 ### Summary
 * Each page or keyword should match.   (Darling Harbour vs Sydney)
@@ -227,9 +237,9 @@ Long-tail vs. Short-tail keywords
 
 ## 3. Title Tag
 HTML Title Tag - needs to include the keywords for that page to target
-eg
-Primary Keyword - Maybe Secondary Keyword | Brand Name
-Meta tags too (like keywords, description)
+
+* Primary Keyword - Maybe Secondary Keyword | Brand Name
+* Meta tags too (like keywords, description)
 
 
 ### META Tags to populate
@@ -241,16 +251,15 @@ keywords
 
 ## 4. The URL Matters
 ### Setup with keywords
-Terms in the URL (eg. http://moz.com/learn/seo/on-page-factors)
-Not obscure numbers (eg. http://www.imdb.com/title/tt0468569/)
 
+* GOOD: 
 ### keep the keyword in the URL rather than generalisation.
-```
-good example is moz.com
-bad example is imdb.com
-```
+Terms in the URL (eg. http://moz.com/learn/seo/on-page-factors)
 
-#### moz.com for SEO tips
+* BAD: Not obscure numbers (eg. http://www.imdb.com/title/tt0468569/)
+
+#### Refer to moz.com for SEO tips
+
 
 ## 5. Content is important
 ### Length:
@@ -261,16 +270,22 @@ Keyword density is important (how many times do you use the keywords)
 
 ### Links
 * It must link to and back from the page properly.
-Then get as many links to this as possible.
-Post on Twitter
-Post on Reddit
+
+
+Then get as many links to this as possible:
+
+* Post on Twitter
+* Post on Reddit
 
 
 -----
 # Creating Navigation Links
-Basic approach is to link to a page defined in routes.rb  get "about" => "pages#about"
-FYI - the general home path is *root_path*
+Basic approach is to link to a page defined in *routes.rb*
+```
+  get "about" => "pages#about"
+```
 
+FYI - the general home path is *root_path*
 ```
 <%= link_to "About", about_path %> 
 <%= link_to "Home", root_path %>
@@ -283,23 +298,20 @@ We could do this for every page however if its a common element then we probably
 # Navigation bar
 Make it a little bit easier for users to move around your site with navigation links. In Rails, layouts make it really easy to create something (like a navigation bar) and have it show up on every page in your app.
 
-
-/views/layouts/application.html.erb
+*/views/layouts/application.html.erb*
 
 This is the template that is the "theme" or for all pages.
 
-Place this before the *<%= yield %> if you want it as a header.
+Place this before the *<%= yield %>* if you want it as a header.
 
 
 ------
 # Bootstrap Installation and Initial Integration
 
 ## Resources
-Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
-
-Bootstrap 3 [Main Site Documentation](http://getbootstrap.com/): where you go after installation to look at documentation on using Bootstrap styles and components
-
-[rubygems.org](http://www.rubygems.org/): the official Ruby Gems site
+* Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
+* Bootstrap 3 [Main Site Documentation](http://getbootstrap.com/): where you go after installation to look at documentation on using Bootstrap styles and components
+* [rubygems.org](http://www.rubygems.org/): the official Ruby Gems site
 
 
 
@@ -313,6 +325,7 @@ Edit the *Gemfile*
 ```
 gem 'bootstrap-sass'
 ```
+
 
 ### To install a Gem from github
 If you need to do this for some reason.
@@ -328,8 +341,8 @@ bundle install
 ```
 
 
-## Add it to the Asset pipeline
-/app/assets/ is where our optimised pipeline is
+## Add Bootstrap to the Asset pipeline
+*/app/assets/* is where our optimised pipeline is.
 This has provision for images, java and stylesheets.
 
 We will be working with stylesheets and need to make a new file.
@@ -345,7 +358,7 @@ Edit this file and add the following:
 @import 'bootstrap';
 ```
 
-### What is Application.css file?
+### What is the Application.css file?
 ```
 app/assets/stylesheets/application.css
 
@@ -362,22 +375,27 @@ So find it *CTRL-C* and then
 rails server -p $PORT -b $IP
 ```
 
-
 ------
 # Bootstrap Customization Part1
 
 ## What can I do?
 Take a look at the site for live examples.
-http://getbootstrap.com/getting-started/#examples
 
-*This includes templates*
+[BootStrap Examples](http://getbootstrap.com/getting-started/#examples)
+
+*This includes templates. Check them out.*
 
 
-##Note: We need CSS Containers to make our pages responsive by default
+## CSS Containers
+**Note:** We need CSS Containers to make our pages responsive by default
+
 We are going to stick them into containers.
 So reference here: and look for the container example
-http://getbootstrap.com/css/#type
 
+*http://getbootstrap.com/css/#type*
+
+
+### .container
 Use .container for a responsive fixed width container.
 
 ```
@@ -386,6 +404,7 @@ Use .container for a responsive fixed width container.
 </div>
 ```
 
+### container-fluid
 Use .container-fluid for a full width container, spanning the entire width of your viewport.
 ```
 <div class="container-fluid">
@@ -394,7 +413,7 @@ Use .container-fluid for a full width container, spanning the entire width of yo
 ```
 
 
-### 1. Add a container to your app!
+## 1. Add a container to your app!
 We are going to use *.container* and add the info to *views/layouts/application.html.erb* above and below the *<%= yield %>* so it affects our pages.
 /views/layouts/application.html.erb
 
@@ -419,7 +438,8 @@ They always start with an _
 
 We are going to start that now as otherwise the code for the Nav Bar will be crazy.
 
-Create the file *app/views/layouts/_header.html.erb*
+Create the file 
+*app/views/layouts/_header.html.erb*
 
 #### Notes on *Partials*
 Basically this gives us a file that can be reused or stand on its own.
@@ -432,26 +452,29 @@ In this case our file will be *_header.html.erb*
 
 The *_* means its a partial and will be included as needed.
 
+
 Move (Cut and Paste) the Navigation bar example we just put in *application.html.erb* 
 
 We then need to tell Rails to include it so amend *application.html.erb* with the following based on where you want the partial you just made.
 ```
 <%= render 'layouts/header' %>
 ```
-Note: we have referenced it as "layouts/header" and *not*  "_header.html.erb"
+**Note:** we have referenced it as "layouts/header" and *not*  "_header.html.erb"
 
 
 
 
 ### 3. Create link to partial
-app/views/layouts/application.html.erb
+
+*app/views/layouts/application.html.erb*
+
 ```
      <%= render 'layouts/header' %>
 ```
 This replaces our previous Home and About info and comes before the main app container with the yield statement.
 
 
-#### 4. Add the nav bar
+### 4. Add the nav bar
 This is an abbreviated version of the sample code with a few small changes incorporating our original ruby.  
 Again refer to the Bootstrap site for examples.
 
@@ -481,10 +504,10 @@ Again refer to the Bootstrap site for examples.
 ```
 
 
-##### The complete original file.
+#### The complete original Nav Bar file.
 This is under the *Components* part of bootstrap so go find some examples.
 
-http://getbootstrap.com/components/#navbar
+*http://getbootstrap.com/components/#navbar*
 
 This is the whole example.  We will replace the current basic header in *application.html.erb* with this and then edit to our needs.
 Plenty of sample code and pretty cool
@@ -543,7 +566,6 @@ Plenty of sample code and pretty cool
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
 ```
 
 
@@ -553,8 +575,7 @@ In this case its to support the Nav Links as the width shrinks and Bootstrap dis
 
 *app/assets/javascripts/application.js*
 
-The actual link needed is //= require bootstrap-sprockets
-
+The actual link needed is *//= require bootstrap-sprockets*
 
 ```
 ...
@@ -584,6 +605,8 @@ its important as to the order where these files go.  Here is a more complete exa
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     ...
+    ...
+    
 ```
 
 ### 7. Home Page: Jumbotron and Button Example
@@ -601,12 +624,13 @@ its important as to the order where these files go.  Here is a more complete exa
 
 -----
 
-# Whats typical to customise Bootstrap Configuration
+# Bootstrap Customization Part 2 (Typical tweaks)
 
 ## Edit the _header to your content.
 Things to change:
+
 * Brand
-* Remove search if you dont need it (<form to /form>)
+* Remove search if you dont need it ```<form to /form>```
 * Populate or delete links on left or right hand sides.
 * Same code as before
 
@@ -619,32 +643,34 @@ Things to change:
 ## JavaScript and other Dependencies
 We have a button in the bar that doesnt work.  Time to add JavaScript support for bootstrap.
 
-/app/assets/javascripts/application.js
-*We need to include the Bootstrap components and will do this AFTER jquery lines*
+*/app/assets/javascripts/application.js*
+
+We need to include the Bootstrap components and will do this AFTER jquery lines.
 ```
 //= require bootstrap
 ```
 
 
 ## Mobile Device Support
-The key word to look for is *"Viewport"*
-http://getbootstrap.com/getting-started/
+The key word to look for is *"Viewport"* if you are searching
 
-Notes are on the Basic-Template page 
-as of July 2016 it was the following lines which need to be included in the <head> of *application.html.erb*
+*http://getbootstrap.com/getting-started/*
+
+**Notes** are on the Basic-Template page 
+as of July 2016 it was the following lines which need to be included in the ```<head>``` of *application.html.erb*
 ```
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
 ```
 Dont forget to stop and restart the rails server.
 
 
 ## Jumbotron
-/app/views/pages/home.html.erb
-###wrap things in the jumbotron
+*/app/views/pages/home.html.erb*
+
+### wrap things in the jumbotron
 ```
 <div class="jumbotron">
   <h1>Welcome to my App!</h1>
@@ -652,12 +678,14 @@ Dont forget to stop and restart the rails server.
 </div>
 ```
 
-###Buttons
+## Buttons
 CSS components in bootstrap
+
 http://getbootstrap.com/css/#buttons
 
-Its not complete cut and paste but close 
-example from bootstrap
+Its not complete cut and paste but close.
+
+*example from bootstrap*
 ```
 <button type="button" class="btn btn-primary">Primary</button>
 ```
@@ -669,25 +697,23 @@ our code in the .html.erb
 ```
 
 -----
-# Bootstrap Customization Part2
+# Bootstrap Customization Part3 (Colors, Fonts etc.)
 
 ## Design Resources
 
-[Variables](http://getbootstrap.com/customize/#variables-basics)
-[FlatUI Colors](http://flatuicolors.com/)
-
-Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
+* [Variables](http://getbootstrap.com/customize/#variables-basics)
+* [FlatUI Colors](http://flatuicolors.com/)
+* Bootstrap 3 [GitHub Gem](https://github.com/twbs/bootstrap-sass): where you go to install the gem
 
 ### Notes
-We will be working with app/assets/stylesheets/bootstrap_and_customization.css.scss file
-
+We will be working with *app/assets/stylesheets/bootstrap_and_customization.css.scss* file
 
 The Variables link above shows the various variables we can change/customise.  For now we are going to select and manually overwrite the ones we need.
 We need to comvest the @navbar-default-bg shown into $navbar-default-bg
 
-We enter the variable and the new value BEFORE we @import 'bootstrap'; 
+We enter the variable and the new values **BEFORE** we @import 'bootstrap'; 
 
-## Example
+## Example 
 ```
 $body-bg: #white;
 
@@ -712,8 +738,9 @@ $jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
 
 The variables site in resources shows the variables can be used to determine the variable name of what we want to change for anything in Bootstrap
 
+
 ## Navigation bar Alernative
-app/views/layouts/_header.html.erb
+*app/views/layouts/_header.html.erb*
 ```
 <nav class="navbar navbar-inverse navbar-default" role="navigation">
 ```
@@ -781,6 +808,7 @@ $jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
 ```
 
 
+
 ## Fonts
 * Go to here:  [Google Fonts](https://www.google.com/fonts)
 * Add the fonts you want to your collection
@@ -789,15 +817,18 @@ $jumbotron-heading-font-size: ceil(($font-size-base * 4.5));
 * Import as per example at the top of the scss
 ```
 @import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+
 ```
 * Name / use the font as speficied in the google info
 ```
 $font-family-sans-serif:           'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 ```
 
+
 ## Nav Bar within Container
 *apps/views/layouts/_header.html.erb*
-This gives more control on formatting et
+
+This gives more control on formatting etc
 ```
 <nav class="navbar navbar-inverse navbar-default" role="navigation">
   <div class="container-fluid">     <!-- Brand and toggle get grouped for better mobile display -->
@@ -822,8 +853,11 @@ This gives more control on formatting et
 ```
 
 
-## Add a "center Class"
+## Add a "center Class" 
+If you want to center the site.
+
 */app/assets/stylesheets/bootstrap_and_customization.css.scss*
+
 You could use this to center elements as desired eg instead of a class="jumbotron", you could make class="jumbotron center" which would center everything.
 
 ```
@@ -836,8 +870,9 @@ You could use this to center elements as desired eg instead of a class="jumbotro
 # Heroku etc
 
 ## Resources
-https://www.heroku.com/
-https://toolbelt.heroku.com/
+* [Heroku](https://www.heroku.com/)
+* [ToolBelt](https://toolbelt.heroku.com/)
+
 
 ## Update Heroku Toolbelt in Cloud9
 ```
@@ -872,7 +907,7 @@ heroku logs --tail
 ```
 
 
-## Clean up Gems for Dev vs Prod
+## Clean up Database Gem for Dev vs Prod
 */gemfile*
 
 You may need to frig around a little more if you have duplicate entries for sqlite3 etc
@@ -888,7 +923,7 @@ group :production do
 end
 ```
 
-## install
+### install
 install and update but dont add PG locally.
 
 *Once you run the bundle install --without production it will remember this for your environment in future*
@@ -896,6 +931,7 @@ install and update but dont add PG locally.
 ```
 bundle install --without production
 ```
+
 
 ## Git Deployment (update then push to heroku)
 ```
@@ -916,10 +952,9 @@ This ends up [here](https://pinteresting123.herokuapp.com)
 
 ## Open our app
 Open in our local browser if we can.
-This WONT work in cloud9
+*This WONT work in cloud9*
 
 To do this you need to use heroku domains.
-
 ```
 heroku open
 ```
@@ -957,12 +992,13 @@ heroku domains:add www.omr-pinteresting.com
 
 
 -----
-# Devise Installation
-*User authentication gem for rails*
+# Devise Installation (Authentication)
+User authentication gem for rails
 
 ## Resources
-* Devise Documentation: https://github.com/plataformatec/devise
-* RubyGems: http://rubygems.org
+* [Devise Documentation:](https://github.com/plataformatec/devise)
+* [RubyGems:](http://rubygems.org)
+
 
  
 ## 1. Make sure you are using the correct version of Ruby in your Gemfile
@@ -971,6 +1007,7 @@ heroku domains:add www.omr-pinteresting.com
 ruby -v
 ```
 Should return Ruby 2.1.2 or higher - use whatever it returns in your Gemfile.
+
 
 
 ### Gemfile
@@ -994,18 +1031,19 @@ bundle install
 
 
 ## 3. Install Devise 
-We are following the readme from the devise github page
+We are following the readme from the [Devise github page](https://github.com/plataformatec/devise)
+
 ```
 rails generate devise:install
 ```
 This will then give us some steps to follow.
 
 ### Devise secret key
-Pinterest/config/initializers/devise.rb
+*/config/initializers/devise.rb*
 
 If devise asks or says it cannot find a secret key, copy and paste the key the terminal gives you and place it in your devise.rb like so:
 
-terminal
+(Run from the bash terminal)
 
 ```
 Devise.setup do |config|
@@ -1018,6 +1056,10 @@ Devise.setup do |config|
 # etc
 end
 ```
+**PB Note:** You probably want to use this rather than the actual key.  
+```
+config.secret_key = ENV[ 'DEVISE_TOKEN_AUTH_SECRET_KEY' ]
+```
 
 
 ## 4. Setting up Devise
@@ -1027,6 +1069,7 @@ These are the steps needed to get it installed on our app.  These come from the 
 ### 1. Default URLs
 We are going to add these to the bottom of the following files.
 NOTE: This needs to be amended to suite our actual server etc.
+
 *config/environments/development.rb*
 ```
 config.action_mailer.default_url_options = { host: 'localhost', port: 8080 }
@@ -1042,7 +1085,8 @@ config.action_mailer.default_url_options = { host: 'http://pinteresting123.herok
 
 ### 2. Set "Home" route
 We've already set our home route. Check it out yourself:
-config/routes.rb
+
+*config/routes.rb*
 
 ```
 root "pages#home"
@@ -1055,13 +1099,18 @@ Flash messages are the messages on Websites that say "Thanks for log in" or "Tha
 We are going to place this in the container before the YIELD
 
 The following code makes a ruby block.
+```
 for each flash 
   do something 
 end
+```
+
 
 #### Embedded ruby run vs display
 <%= Will run embedded ruby and DISPLAY to the web client
+
 <%  Will run embedded ruby but NOT show anything.
+
 
 
 *app/views/layouts/application.html.erb*
@@ -1104,8 +1153,9 @@ The model interacts with our database
 Go to db/migration and see the files there should be something like db/migration/20130922022322_devise_create_users.rb #the number is the date you create it
 
 ### Q: Did you make a mistake generating a model?
+The following deletes the generate command in case you made a mistake
 ```
-rails destroy devise user #deletes the generate command in case you made a mistake
+rails destroy devise user 
 ```
 
 
@@ -1115,6 +1165,9 @@ rake db:migrate
 ```
 This command takes the migration file and runs it, so that it generates tables in your database
 We will also need to migrate in heroku.
+```
+heroku rake db:migrate
+```
 
 
 ## 3. Restart your server
@@ -1122,10 +1175,10 @@ CONTROL + C to Stop the Server
 ```
 rails server -p $PORT -b $IP
 ```
-You'll need to restart your application each time you install a gem or each time you run $rake db:migrate
+You'll need to restart your application each time you install a gem or each time you run ```rake db:migrate```
 
 -----
-# Rails Configuration - New User Signup and Signin
+# Rails/Devise Configuration - New User Signup and Signin
 
 ## Find all your paths
 ```
@@ -1133,28 +1186,32 @@ rake routes
 ```
 This lists all the paths available to your application.
 
-Sessions cover user sessions (when logged in etc.)
-Passwords 
-Registration.
-
+* Sessions cover user sessions (when logged in etc.)
+* Passwords 
+* Registration.
 
 
 ## 1. Update your Home view
 *app/views/pages/home.html.erb*
 
 ### First: fix the stubbed out paths. 
-We can get these from the rake route command but we will need to add _path at the end
-signup: new_user_registration_path
-login: new_user_session_path
+We can get these from the rake route command but we will need to add ```_path``` at the end of the line.
+
+* signup: ```new_user_registration_path```
+* login: ```new_user_session_path```
 
 
 ### Second: Add some logic to the page about the user status
 *Read the Controller Filters and Helpers in the Devise readme from github*
+```
 if the user has signed in
   do something 
 else
   do something different
 end
+```
+
+Example
 
 
 ```
@@ -1180,8 +1237,11 @@ end
 
 
 ## 2. Update your header partial
-*app/views/layout/_header.html.erb*
+
 We want to update the header to include Logout or signout as appropriate
+
+*app/views/layout/_header.html.erb*
+
 
 Note that we are having to use a *method :delete* as the REST option for logout 
 (we can get this from the rake routes and see its a DELETE not a GET)
@@ -1203,12 +1263,13 @@ Note that we are having to use a *method :delete* as the REST option for logout
 -----
 
 # Enforcing Strong Passwords
-We need to ensure we can enforce stronger (than default) passwords.
+We need to ensure we can enforce stronger (than default) passwords. Use this example then amend as needed.
 
 ## 1. Add a format validator to the password field
 1. Let's add a requirement that all new passwords have some complexity requirements
 2. By adding a regular expression to the password field in the user model. A regular expression is a way to check and see if certain characters are present in a string. You can learn more about regular expressions [here](http://en.wikipedia.org/wiki/Regular_expression)
 3. In the User model, we want to add a password validator (we didn't have one before) and a :format field for the password:
+
 *app/models/user.rb*
 
 ```
@@ -1234,9 +1295,10 @@ Here is the regular expression we are using:
 
 
 ## 3. Understanding Regular Expressions.
-*Let's break this down into smaller pieces so we can understand it...
-*Let's start with the beginning and the end
-*Regular expressions exists between two forward slashes, and anything in between is what we want to match. Check this out:
+
+* Let's break this down into smaller pieces so we can understand it.
+* Let's start with the beginning and the end
+* Regular expressions exists between two forward slashes, and anything in between is what we want to match. Check this out:
 ```
 / this is what we match between the forward slashes / 
 ```
@@ -1283,14 +1345,293 @@ How this works is that is creates a group which is "looking ahead" in the string
 1. Now, when we put those together, we ensure passwords are at least 10 characters long, contains a number,  a lowercase and uppercase letter, as well as a special character.
 2. A great site to use to test and learn more about ruby regular expressions is rubular.
 3. One thing to keep in mind when building regular expressions is that since you probably won't build them all the time, it can be a pain to remember how to do it correctly. I frequently use rubular and examples on the internet as references 
-4. Edit the above as needed based on site...
+4. Edit the above as needed based on site specific needs...
+
 
 ## 4. Testing our changes
+
 * On the homepage click on the ‘sign up’ button
 * Try to sign up with a user with a weak password
 * Click on ‘submit’ and you’ll get the message ‘password is invalid’, meaning our complexity requirements work!
 * It's probably a good idea to update the sign up page to tell users we require strong passwords!
-* 
-* -----
-* 
-    
+
+-----
+ 
+# Styling Devise with Bootstrap.
+
+## 1. Delete / Cleanup Scaffhold files *(Optional)*
+*These are created by default by Devise.*
+
+If we arent going to use these views then we can delete to cleanup.
+I have left them in place for now as I think they are useful for later.
+We arent styling them now but same examples would work as a basis.
+
+Note: RTFM but generally enabled under */app/models/user.rb* 
+
+eg ```devise: :recoverable``` means they can reset passwords
+
+
+* app/views/devise/confirmations 
+* app/views/devise/unlock 
+* app/views/devise/mailer/confirmation_instructions.html.erb 
+* app/views/devise/mailer/unlock_instructions.html.erb
+
+
+## 2. Implement BootStrap for Devise Views
+Use Bootstrap to make the forms look better
+
+### Resource: [BootStrap Forms](http://getbootstrap.com/css/#forms)
+
+### Make the Form Nicer
+#### 1. Wrap a ```<div class="form-group">```  around the *INPUT* fields.
+There will probable already be something like ```<div class="field">``` and we need to change it to ```<div class="form-group">```
+
+*If you are adding new then you will need to include the ```</div>``` at the end of the field.*
+
+
+#### 2. Add ```class="form-control"``` to our *INPUT* fields.
+
+Here we are using embedded ruby so we need to change
+```
+<%= f.email_field :email, autofocus: true %>
+``` 
+to be 
+```
+<%= f.email_field :email, autofocus: true, class: "form-control" %>
+```
+
+
+##### Notes on *HASH_ROCKETS* and *COLONS*
+We have added the class: at the end of the embedded ruby command.
+
+Also as we are using Ruby / Rails 3 or greater we can use either *HASH_ROCKETS* or *COLONS*
+
+For example:
+
+```
+autofocus: true
+```
+
+*is the same as*
+```
+:autofocus ==> true
+```
+
+*Below are some example files.*
+
+#### app/views/devise/registrations/new.html.erb
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1>Sign up</h1>
+  </div>
+
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Sign up", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="panel-footer">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+```
+
+
+#### app/views/devise/registrations/edit.html.erb
+
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h1>Edit <%= resource_name.to_s.humanize %></h1>
+    </div>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "form-control", :autofocus => true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+        <%= f.password_field :password, class: "form-control", :autocomplete => "off" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
+        <%= f.password_field :current_password, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Update", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-footer">
+    <h3>Cancel my account</h3>
+
+    <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), :data => { :confirm => "Are you sure?" }, :method => :delete, class: "btn btn-warning" %></p>
+
+    <%= link_to "Back", :back %>
+  </div>
+</div>
+```
+
+
+#### app/views/devise/passwords/new.html.erb
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h1>Forgot your password?</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "form-control", :autofocus => true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-footer">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+```
+
+
+#### app/views/devise/passwords/edit.html.erb
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h1>Change your password</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
+      <%= devise_error_messages! %>
+      <%= f.hidden_field :reset_password_token %>
+
+      <div class="form-group">
+        <%= f.label :password, "New password" %>
+        <%= f.password_field :password, class: "form-control", :autofocus => true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirm new password" %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Change my password", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-footer">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+```
+
+
+#### app/views/devise/sessions/new.html.erb
+```
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h1>Sign in</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "form-control", :autofocus => true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Sign in", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-footer">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+```
+
+
+## 3. Add an "Account Settings" link to the header Partials
+### *app/views/layouts/_header.html.erb*
+```
+.
+.
+.
+          <li><%= link_to "Account Settings", edit_user_registration_path %></li>
+.
+.
+.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+ 
+ 
