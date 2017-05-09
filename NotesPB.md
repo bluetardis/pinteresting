@@ -1691,9 +1691,12 @@ remove the following code in the form as we are covering it in the *models/user.
 
 -----
 
-# Pins and Scaffhold
+# Pins and Scaffhold (Model View Controller)
 
 ## 1. Generate a pins scaffold 
+Here we generate the scaffold (MVC) for a Resource Pins and then Migrate the database so it exists.
+This also creates the routes.
+
 ```
 rails generate scaffold pins description:string
 rake db:migrate #run the migration
@@ -1712,9 +1715,211 @@ Yes you could:
 rails generate scaffold pins description:string --skip-stylesheets
 ```
 
+This creates the database table and route and all CRUD screens.
+
+-----
+# Rails and Resources (CRUD)
+In Rails a resource in anything you can Create/Read/Update/Destroy
+Create  POST
+Read    GET
+Update  PUT
+Destroy DELETE
+
+## Notes
+
+### Create 
+Rails crates a *new_pin* path which has a GET.  This gets turned into a Create/POST when you *Submit* or *Create* the "Go do it" action which is why the Create doesnt have a page of its own. (its only called once the new is all filled out.)
+Only the Routes with *prefixes* shown can have links created to them.
+
+### Edit
+Edit is always called with the resourceid eg /pins/:id/edit
+
+This way RAILS knows which resource to RUD...
+
+#### Examples
+READ    /pins/1
+UPDATE  /pins/1/edit
+DESTROY /pins/1/delete
 
 
+## Basic Example: (Twitter)
+Users
+Tweets
+Sessions
 
+## Start with Business Process to determine Resources
+Create then style (MVC)
+Model
+View
+Controller
+
+## Routes
+Things start with Routes.  To find all routes in the app
+```
+rake routes
+```
+Our scaffhold made 8 routes for the Model *pins*
+
+URI  is basically the URL
+Controller is the controller handling things
+
+-----
+# Pins and Controller
+
+*app/controllers/pins_controller.rb*
+
+
+## Original File
+This is the file created by the scaffhold.
+```
+class PinsController < ApplicationController
+  before_action :set_pin, only: [:show, :edit, :update, :destroy]
+
+  # GET /pins
+  # GET /pins.json
+  def index
+    @pins = Pin.all
+  end
+
+  # GET /pins/1
+  # GET /pins/1.json
+  def show
+  end
+
+  # GET /pins/new
+  def new
+    @pin = Pin.new
+  end
+
+  # GET /pins/1/edit
+  def edit
+  end
+
+  # POST /pins
+  # POST /pins.json
+  def create
+    @pin = Pin.new(pin_params)
+
+    respond_to do |format|
+      if @pin.save
+        format.html { redirect_to @pin, notice: 'Pin was successfully created.' }
+        format.json { render :show, status: :created, location: @pin }
+      else
+        format.html { render :new }
+        format.json { render json: @pin.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /pins/1
+  # PATCH/PUT /pins/1.json
+  def update
+    respond_to do |format|
+      if @pin.update(pin_params)
+        format.html { redirect_to @pin, notice: 'Pin was successfully updated.' }
+        format.json { render :show, status: :ok, location: @pin }
+      else
+        format.html { render :edit }
+        format.json { render json: @pin.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /pins/1
+  # DELETE /pins/1.json
+  def destroy
+    @pin.destroy
+    respond_to do |format|
+      format.html { redirect_to pins_url, notice: 'Pin was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_pin
+      @pin = Pin.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def pin_params
+      params.require(:pin).permit(:description)
+    end
+end
+```
+
+
+## Cleaned up Example (Not needed as PB likes having references.)
+
+Cleaned up to remove
+* Commented examples
+* .JSON for API
+
+
+```
+class PinsController < ApplicationController
+  before_action :set_pin, only: [:show, :edit, :update, :destroy]
+
+  def index
+    @pins = Pin.all
+  end
+
+  def show
+  end
+
+  def new
+    @pin = Pin.new
+  end
+
+  def edit
+  end
+
+  def create
+    @pin = Pin.new(pin_params)
+    if @pin.save
+      redirect_to @pin, notice: 'Pin was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  def update
+    if @pin.update(pin_params)
+      redirect_to @pin, notice: 'Pin was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @pin.destroy
+    redirect_to pins_url
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_pin
+      @pin = Pin.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def pin_params
+      params.require(:pin).permit(:description)
+    end
+end
+```
+
+## Notes
+This file was generated from our Scaffhold and creates 7 actions and 2 private methods.
+
+These actions map to our CRUD actions.
+
+CREATE  New + Create
+READ    Index + Show
+UPDATE  Update + Edit
+DESTROY Destroy
+
+Again this goes back to having a page (enter information) and then the action (input the information to the model)
 
 
 
