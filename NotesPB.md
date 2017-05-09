@@ -1689,10 +1689,28 @@ remove the following code in the form as we are covering it in the *models/user.
 ```
 
 
+-----
+
+# Pins and Scaffhold
+
+## 1. Generate a pins scaffold 
+```
+rails generate scaffold pins description:string
+rake db:migrate #run the migration
+```
 
 
+## 2. Delete the default scaffold CSS
+This file gets created with scaffold, and messes up the rest of your CSS, so just delete it
 
+*app/assets/stylesheets/scaffolds.css.scss*
 
+### Q: Could I tell Rails, "Hey bud, just don't install that ugly default scaffold stylesheet?"
+Yes you could:
+
+```
+rails generate scaffold pins description:string --skip-stylesheets
+```
 
 
 
