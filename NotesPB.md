@@ -41,6 +41,15 @@ rails server -p $PORT -b $IP
 
 -----
 # GIT
+## Git Resources
+* [Learn Git Branching Game](http://pcottle.github.io/learnGitBranching/)
+* [GitHub Guides youtube.com](http://www.youtube.com/user/GitHubGuides?feature=watch)
+* [Try Git interactive lesson](http://try.github.io/levels/1/challenges/1)
+
+
+
+
+
 ## Git Setup
 ### Local Config
 ```
@@ -1983,7 +1992,7 @@ Here is the updated file.  We are styled with Bootstrap as per previous notes.
 ```
 
 
-
+**Starting Point is Day22**
  
  
  
