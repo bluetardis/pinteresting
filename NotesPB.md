@@ -941,6 +941,11 @@ git push master
 git push heroku master
 ```
 
+## Force Git Deployment 
+If something gets stuffed up and we need to push/force.
+```
+git push -f heroku master #the -f forces the changes to save 
+```
 
 ## rename our Heroku app
 ```
@@ -1764,7 +1769,7 @@ URI  is basically the URL
 Controller is the controller handling things
 
 -----
-# Pins and Controller
+# Pins  Controller
 
 *app/controllers/pins_controller.rb*
 
@@ -1923,10 +1928,62 @@ Again this goes back to having a page (enter information) and then the action (i
 
 
 
+## Controller and Views
+The controller finds WHAT we want from the MODEL.  The VIEW displays it.
+
+
+In the *pins_controller.rb* we can see the main actions
+for example
+```
+def index
+  @pins = Pin.all
+end
+```
+
+### Notes
+* This predefines the Resource we will be dealing with.  In this case "all"
+* Unless a view is specically mentioned then it will use the view from views with the same name as the action.  In this case *app/views/pins/index.html.erb*
+* The index view mentioned above, starts with a table.  The top are heading rows.  Then we loop through the data.  
+* In the views, eg ```link_to 'Show', ``` *path* specific pin eg /pins/1 could be either ```pin_path(pin)``` or just ```pin```
+* We can see that it has created a _form.html.erb partial for New and Edit
+
+
+### Updating the Pin View form partial.
+
+This is called from *apps/views/pins/new.html.erb*
+```
+<%= render 'form' %>
+```
+
+
+Here is the updated file.  We are styled with Bootstrap as per previous notes.
+*apps/views/pins/_form.html.erb*
+```
+<%= form_for(@pin) do |f| %>
+  <% if @pin.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pin.errors.count, "error") %> prohibited this pin from being saved:</h2>
+
+      <ul>
+      <% @pin.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :description %>
+    <%= f.text_field :description, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
+```
 
 
 
- 
  
  
  
