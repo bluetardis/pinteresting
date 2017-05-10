@@ -1991,11 +1991,130 @@ Here is the updated file.  We are styled with Bootstrap as per previous notes.
 <% end %>
 ```
 
+-----
 
-**Starting Point is Day22**
- 
- 
- 
+# Embedding YouTube Videos or Maps
+Everything here uses iFrame.
 
- 
- 
+## Vimeo
+1. Goto the source (Vimeo) Site
+2. Find the *Share* Option
+3. Copy the *Embed* Code
+4. Paste into your location on your website / code.
+5. Fix the error.. you normally need to add http:// to the source
+6. Edit as you prefer
+
+### Options
+You might get an options button.  This allows you to resize and otherwise play with the link created.
+
+
+## YouTube
+1. Goto the source (YouTube) Site
+2. Find the *Share* Option
+3. Copy the *Embed* Code
+4. Paste into your location on your website / code.
+5. Fix the error.. you normally need to add http:// to the source
+6. Edit as you prefer
+
+### Options
+You will get options.  This allows you to resize and otherwise play with the link created.
+
+
+## Maps
+1. Goto the source (Google Map) Site.  Find and zoom your location.
+2. Click the *Embed* (Chains) Option
+3. Copy the *Embed* Code
+4. Paste into your location on your website / code.
+5. Fix the error.. you normally need to add http:// to the source
+6. Edit as you prefer
+
+### Options
+You will get options to customize.  This allows you to resize and otherwise play with the link created.
+
+-----
+
+# Adding Security and Relationships
+
+## Rails Associations
+[Guide to Associations:](http://guides.rubyonrails.org/association_basics.html)
+
+## 1. Set up your associations (Relationships)
+
+### A Pin belongs to a user 
+A Pin belongs to a User and this is represented as  ``` belongs_to :user ``` and needs to be added to the pin model file.
+*app/models/pin.rb*
+```
+class Pin < ActiveRecord::Base
+	belongs_to :user
+end
+```
+**This has to use the SINGULAR term eg *user* NOT *users* **
+
+
+### A User has_many Pins  
+A User has many Pins and this is represented as  ``` has_many :pins ``` and needs to be added to the pin model file.
+*app/models/user.rb*
+```
+class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  has_many :pins
+end
+```
+
+
+
+## 2. Start the Rails console
+The Rails console allows us to interact directly with data in the database. You'll do this to update data directly, or mostly just for testing out Ruby code before bringing it into your project
+
+```
+rails console
+```
+
+### Once in the console...
+This is to prove it cant see users yet (we still need a migrate)
+```
+> Pin.connection #This establishes a connection to the database (And spits out a LOT of unnecessary data)
+> Pin.inspect #shows all of the parameters for a Pin 
+> pin = Pin.first #make sure Pin.first is UPPERCASE
+> pin.user
+```
+
+### Stop the Console when you're done
+CONTROL + D #closes the Console 
+
+
+## 3. Generate a new migration for a User's index
+This is so the pins model can store the userID for indexing/locating.
+
+```
+rails generate migration add_user_id_to_pins user_id:integer:index
+rake db:migrate
+```
+
+
+## 4. Let's see if it worked
+Back in Rails console (in our terminal) let's set a User ID on a Pin.
+
+```
+> Pin.connection #This establishes a connection to the database (And spits out a LOT of unnecessary data)
+> Pin.inspect #shows all of the parameters for a Pin 
+> pin = Pin.first
+> pin #Check out the pin!
+> pin.user_id = 1
+> pin.save
+
+> user = User.first 
+> user.pins
+
+#Now we can call these methods
+> user.pins
+> pin.user
+```
+
+
+
