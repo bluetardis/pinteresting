@@ -2033,7 +2033,7 @@ You will get options to customize.  This allows you to resize and otherwise play
 
 -----
 
-# Adding Security and Relationships
+# Adding Security and Relationships Part 1
 
 ## Rails Associations
 [Guide to Associations:](http://guides.rubyonrails.org/association_basics.html)
@@ -2101,10 +2101,10 @@ rake db:migrate
 Back in Rails console (in our terminal) let's set a User ID on a Pin.
 
 ```
-> Pin.connection #This establishes a connection to the database (And spits out a LOT of unnecessary data)
-> Pin.inspect #shows all of the parameters for a Pin 
+> Pin.connection  #This establishes a connection to the database (And spits out a LOT of unnecessary data)
+> Pin.inspect     #shows all of the parameters for a Pin 
 > pin = Pin.first
-> pin #Check out the pin!
+> pin             #Check out the pin!
 > pin.user_id = 1
 > pin.save
 
@@ -2116,5 +2116,206 @@ Back in Rails console (in our terminal) let's set a User ID on a Pin.
 > pin.user
 ```
 
+-----
 
+# Adding Security and Relationships Part 2
+
+## What Are we doing?
+### Saving Users_ID when we touch a pin.
+We have a page to create/save/etc for Pins but now we have added a new field we also need to update that with the ID of the user who owns the pin.
+
+### Adding Security 
+EG setup so that you have to be logged on to see pins.
+Users can edit their pins
+
+
+## 1. Update the Pins Controller
+We will be using a Devise helper called ```current_user``` to help us locate the userID to add to the pin table.
+
+Keep in mind that the following example uses the "pruned" version of this without JSON etc.
+
+The key areas we are touching are:
+* new  
+* create
+We are changing the method from ```Pin.new``` to ```current_user.pins.build```
+
+
+*app/controllers/pins_controller.rb*
+
+```
+class PinsController < ApplicationController
+  before_action :set_pin, only: [:show, :edit, :update, :destroy]
+
+  def index
+    @pins = Pin.all
+  end
+
+  def show
+  end
+
+  def new
+    #Original
+    #@pin = Pin.new
+
+    #Build a new pin with the userID already set from the current user
+    @pin = current_user.pins.build
+  end
+
+  def edit
+  end
+
+  def create
+    @pin = current_user.pins.build(pin_params)
+    if @pin.save
+      redirect_to @pin, notice: 'Pin was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  def update
+    if @pin.update(pin_params)
+      redirect_to @pin, notice: 'Pin was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @pin.destroy
+    redirect_to pins_url
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_pin
+      @pin = Pin.find_by(id: params[:id])
+    end
+
+    def correct_user
+      @pin = current_user.pins.find_by(id: params[:id])
+      redirect_to pins_path, notice: "Not authorized to edit this pin" if @pin.nil?
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def pin_params
+      params.require(:pin).permit(:description, :image)
+    end
+end
+```
+
+
+## 2. Update the pins index view to show the UsersID in the table.
+Here we are going to add another column 
+
+### Header
+The easiest way is to copy the existing column header for description and then edit that to whatever we want to say.
+```      <th>User</th>  ```
+
+### Data/Table
+We then need to copy description in the loop and update to refer to something like pin.user_id
+``` <td><%= pin.user_id %></td>```
+
+### Cleanup and Bug Fix
+We will show the user Email Rather than an ID
+We also need to only show if it exists eg Dont error out on NULL.
+```
+<%= pin.user.email if pin.user %>
+```
+
+Or alternatively you could the Ruby "try" method….(I don't choose this one, but it's good to know about).
+```
+<%= pin.user.try(:email) %>
+```
+
+
+### Actual changes to the pins index view.
+*app/views/pins/index.html.erb*
+```
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Pins</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pins.each do |pin| %>
+      <tr>
+        <td><%= pin.description %></td>
+        <td><%= pin.user.email if pin.user %></td>
+        <td><%= link_to 'Show', pin %></td>
+        <td><%= link_to 'Edit', edit_pin_path(pin) %></td>
+        <td><%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pin', new_pin_path %>
+
+```
+zzzUPTOHERE - it was 10 mins in zzz
+
+
+## 3. Add devise User authentication at the controller to make sure user is logged in
+* Resource: https://github.com/plataformatec/devise
+
+Add the before_action to your Pins Controller
+*app/controllers/pins_controller.rb*
+```
+before_action :authenticate_user!, except: [:index, :show]
+```
+
+4. Surround the edit link with an "if" conditional
+This way you can only see your pins. To put that another way: A user can only see his pins (and not other user's pins). Make sense?
+
+*app/views/pins/index.html.erb*
+```
+...
+<% if pin.user == current_user %>
+  <%= link_to 'Edit', edit_pin_path(pin) %>
+  <%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>
+...
+```
+
+
+*app/views/pins/show.html.erb*
+```
+...
+<% if @pin.user == current_user %>
+  <%= link_to 'Edit', edit_pin_path(@pin) %>
+<% end %> <%= link_to 'Back', pins_path %>
+...
+```
+
+
+## 5. Add correct_user method
+Add the before_action to your Pins Controller
+
+*app/controllers/pins_controller.rb*
+
+```
+before_action :correct_user, only: [:edit, :update, :destroy]
+```
+
+
+## 6. Surround the "New Pin" link with an "if" conditional
+*app/views/pins/index.html.erb*
+```
+...
+<% if user_signed_in? %>
+  <%= link_to 'New Pin', new_pin_path %>
+<% end %>
+...
+```
 
