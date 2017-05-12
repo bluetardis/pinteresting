@@ -41,11 +41,12 @@ rails server -p $PORT -b $IP
 
 -----
 # GIT
+
 ## Git Resources
+
 * [Learn Git Branching Game](http://pcottle.github.io/learnGitBranching/)
 * [GitHub Guides youtube.com](http://www.youtube.com/user/GitHubGuides?feature=watch)
 * [Try Git interactive lesson](http://try.github.io/levels/1/challenges/1)
-
 
 
 
@@ -2212,11 +2213,18 @@ Here we are going to add another column
 
 ### Header
 The easiest way is to copy the existing column header for description and then edit that to whatever we want to say.
-```      <th>User</th>  ```
+
+```
+<th>User</th>
+```
+
 
 ### Data/Table
 We then need to copy description in the loop and update to refer to something like pin.user_id
-``` <td><%= pin.user_id %></td>```
+```
+<td><%= pin.user_id %></td>
+```
+
 
 ### Cleanup and Bug Fix for nil
 We will show the user Email Rather than an ID
@@ -2229,6 +2237,7 @@ Or alternatively you could the Ruby "try" method….(I don't choose this one, bu
 ```
 <%= pin.user.try(:email) %>
 ```
+
 
 
 ### Actual changes to the pins index view.
@@ -2269,11 +2278,17 @@ Or alternatively you could the Ruby "try" method….(I don't choose this one, bu
 
 ## 3. Add devise User authentication at the CONTROLLER to make sure user is logged in
 * Resource: https://github.com/plataformatec/devise
-```authenticate_user!```
+
+```
+authenticate_user!
+```
+
 Keep in mind that where ```before_filter``` is referenced it can also be ```before_action```
 
 
+
 We need to do this so we can do things like:
+
 * Make sure the user is logged in before showing pins
 * Make sure a user is logged in before creating
 * only let a user edit their pins
@@ -2281,9 +2296,9 @@ We need to do this so we can do things like:
 * *Once done we can add control to the controller and logic to the view*
 
 
-Add the before_action to your Pins Controller (an additional line):
-*app/controllers/pins_controller.rb*
 
+### Add the before_action to your Pins Controller (an additional line):
+*app/controllers/pins_controller.rb*
 Here we are saying we need to authenticate the user for anything expect showing a pin or the index.
 If we just wanted a specific thing eg Delete we could use ```only:``` instead of ```except```
 
@@ -2291,35 +2306,44 @@ If we just wanted a specific thing eg Delete we could use ```only:``` instead of
 before_action :authenticate_user!, except: [:index, :show]
 ```
 
+
 ## 4. Surround the VIEWs CRUD link with an "if" conditional
 This way you can only CRUD for your pins. 
 We need to do this for **index** and **show** and are removing the **Edit** and **Destroy** options until its your pin.
 
+
+
 *app/views/pins/index.html.erb*
 Note - we can use the variable pin.user as this is part of the loop defined already.
+
 ```
-...
 <% if pin.user == current_user %>
-  <%= link_to 'Edit', edit_pin_path(pin) %>
-  <%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
+	<%= link_to 'Edit', edit_pin_path(pin) %>
+	<%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
 <% end %>
-...
 ```
+
+
+
+
+
 
 
 *app/views/pins/show.html.erb*
 Note - here we have to use the @pin.user as this is what was defined by the CONTROLLER.
+
+
 ```
-...
 <% if @pin.user == current_user %>
   <%= link_to 'Edit', edit_pin_path(@pin) %> |
 <% end %> 
 <%= link_to 'Back', pins_path %>
-...
+
 ```
 
 
-## 5. Update the CONTROLLER so that users cant type in the EDIT or DELETE link from their browser
+## 5. Update the CONTROLLER 
+This way users cant type in the EDIT or DELETE link from their browser
 There is currently a method called ```set_pin```. It gets us the current pinID.
 
 Security wise we only want to use it for R (read/index) and are going to need a new action for for C/U/D.
@@ -2328,11 +2352,17 @@ We are going to add a new method ```correct_user method``` to the CONTROLLER and
 
 
 *app/controllers/pins_controller.rb*
-**The Secure Method** (This goes under private methods)
-This checks the *pin_user_id* against the logged in *user_id*.  If its not TRUE then you get redirected with an error message.
+
+**Add a new Secure Method - correct_user** (This goes under private methods)
+
+This checks the *pin_user_id* against the logged in *user_id*. 
+If its not TRUE then you get redirected with an error message.
+
+
 the ```notice:``` adds a flash message.
 
-Note: the ```find_by``` wont raise an error if **nil** is retured.
+Note: We are using ```find_by``` as it won't raise an error if **nil** is retured.
+
 ```
     def correct_user
       @pin = current_user.pins.find_by(id: params[:id])
@@ -2340,8 +2370,10 @@ Note: the ```find_by``` wont raise an error if **nil** is retured.
     end
 ```
 
-**Call the Method**
-We need to tell the controller to run this as a fefore action.
+**Call the Method - correct_user**
+
+We need to tell the controller to run this as a before action.
+
 In this code we are showing the "Current State" of the edits to the controller file but we are adding the correct_user only.
 
 ```
@@ -2351,9 +2383,12 @@ In this code we are showing the "Current State" of the edits to the controller f
 ```
 
 
-## 6. Fix the *New* option for VIEW index.
-Surround the "New Pin" link with an "if" conditional
+
+## 6. Fix the *New* option for VIEW index
+Surround the "New Pin" link with an "if" conditional.
+
 *app/views/pins/index.html.erb*
+
 ```
 ...
 <% if user_signed_in? %>
@@ -2361,4 +2396,5 @@ Surround the "New Pin" link with an "if" conditional
 <% end %>
 ...
 ```
+
 
