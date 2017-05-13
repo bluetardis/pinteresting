@@ -911,6 +911,17 @@ heroku rake db:reset
 heroku rake db:migrate
 ```
 
+## Migration Status for Rails/Heroku 
+```
+rake db:migrate:status			#rails dev
+heroku rake db:migrate:status	#heroku
+```
+
+## Migration Rollback
+```
+rake db:rollback
+```
+
 ## Heroku Logs
 ```
 heroku logs --tail
@@ -2397,4 +2408,271 @@ Surround the "New Pin" link with an "if" conditional.
 ...
 ```
 
+
+-----
+# Paperclip ImageMagick install
+
+ImageMagick is a gem for converting and formatting images. It's a requisite for Paperclip, so let's install it.
+
+### Other options are:
+* CarrierWave
+* Amazon S3 image uploader
+
+
+## Download ImageMagick
+### Ubuntu/Cloud9
+```
+sudo apt-get update
+sudo apt-get install imagemagick
+```
+
+[Note](https://community.c9.io/t/install-imagemagick/3608) you may get an error and need to try:
+```
+sudo add-apt-repository main
+```
+
+
+### Windows 
+http://www.imagemagick.org/script/binary-releases.php#windows
+
+### Mac 
+http://cactuslab.com/imagemagick/
+
+**Q: How do I know if I installed ImageMagick correctly?**
+A: Open a new terminal window and run the command:
+```
+identify
+```
+
+You should get a response including something about ImageMagick's version.
+
+-----
+
+
+# PaperClip Gem Installation & Configuration
+Paperclip is a gem that allows you to upload images
+
+## 1. Install the paperclip gem 
+[https://github.com/thoughtbot/paperclip](https://github.com/thoughtbot/paperclip)
+
+### Update the Gemfile
+*/Gemfile*
+```
+gem 'paperclip', '~> 4.2'
+```
+
+
+### Bundle Install
+From the terminal run: 
+```
+$ bundle install 
+```
+
+
+## 2. Add Images to a Model (in this case Pin)
+We need to update the model to tell rails it must have an attached file.  We are going to use a field name of "image".
+The second line specifies what sort of images we accept.
+For more information go [here](http://stackoverflow.com/questions/21897725/papercliperrorsmissingrequiredvalidatorerror-with-rails-4)
+
+The specific code is below and goes after ```belongs_to :user```.
+```
+	has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+	validates_attachment_file_name :image, :matches => [/png\Z/, /jpe?g\Z/, /gif\Z/]
+
+```
+
+**Notes**
+
+* The ```:styles``` allows us to get rails to create multiple versions of the file when uploaded.  eg Large/Medium/Thumb and we can define their sizes.
+* Using ```:default_url => "/images/:style/missing.png"``` We can pass through a default URL for a missing image.
+
+
+*/app/models/pin.rb*
+```
+class Pin < ActiveRecord::Base
+  belongs_to :user
+  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  validates_attachment_file_name :image, :matches => [/png\Z/, /jpe?g\Z/, /gif\Z/]
+end
+```
+
+
+## 3. Generate a paperclip migration (for the model we just changed)
+We have just told rails that the Pins Model has attached files.  Lets generate the migration for that now so we can get Paperclip to do its work.
+
+
+### Generate a Migration for Pin/Image (above)
+***Note** This will generate a migration with both an Up (do the migration) and a Down (rollback) method.
+```
+rails generate paperclip pin image
+```
+
+
+### Run and check the migration
+```
+rake db:migrate
+rake db:migrate:status
+```
+
+### Restart your server after adding a gem file/migrations
+```
+^C
+rails server -p $PORT -b $IP
+```
+
+
+## 4. Fix Pins Views (add image)
+(Normally needs to be done for both edit and new views).  We are working on the pin form:
+
+*/app/views/pins/_form.html.erb*
+
+
+### Make the form type multipart:
+Change:
+```
+<%= form_for(@pin) do |f| %>
+```
+To:
+```
+<%= form_for @pin, html: { multipart: true } do |f| %>
+```
+
+**Note** The ```do |f|``` defines what the fields are going to be referenced as in the form.  eg ```f.label :description``` etc. in the code below.
+
+### Add the new image field.
+Here we will put it above the description.
+
+We are going to copy the existing code and change it.
+
+#### Changes
+*description*	becomes	*image*
+
+*f.text_field*	becomes	*f.file_field*
+
+```
+.
+.
+.
+  <div class="form-group">
+    <%= f.label :image %>
+    <%= f.file_field :image, class: "form-control" %>
+  </div>
+.
+.
+.
+```
+
+
+
+## 5. Update the Pins Controller for strong parameters
+We need to specify we need an :image.
+
+*/app/controllers/concerns/pins_controller.rb*
+
+**Old:**
+```
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def pin_params
+      params.require(:pin).permit(:description)
+    end
+```
+
+**New**
+```
+    def pin_params
+      params.require(:pin).permit(:description, :image)
+    end
+```
+
+
+## 6. Update the pins show view
+As per the paperclip readme.md.  Examples with styles as defined earlier.
+```
+<%= image_tag @pin.image.url %>
+<%= image_tag @pin.image.url(:medium) %>
+<%= image_tag @pin.image.url(:thumb) %>
+```
+
+In our case the code is ```<%= image_tag @pin.image.url %>``` and we are going to place it above the Description. Format/style as desired.
+
+**Note** 
+
+* We are going to get rid of the ```<p id="notice"><%= notice %></p>``` as this is redudant as its being done by the *flash messaging*
+* We are using ```image_tag``` which is like ```link_to```
+
+
+*/app/views/pins/show.html.erb*
+```
+<p>
+  <%= image_tag @pin.image.url(:medium) %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @pin.description %>
+</p>
+
+<% if @pin.user == current_user %>
+  <%= link_to 'Edit', edit_pin_path(@pin) %> |
+<% end %> 
+<%= link_to 'Back', pins_path %>
+```
+
+
+## 7. Update the pins index
+We need to add the image to the main index. 
+The key code changes are:
+
+* In the Table header we are adding an image Description ```<th>Image</th>```
+* In the Table Body we are add a link to the image and style ```<td><%= image_tag pin.image.url(:medium) %></pd>```
+
+*/app/views/pins/index.html.erb*
+Example of file with the changes made
+```
+<h1>Listing Pins</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Description</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pins.each do |pin| %>
+      <tr>
+        <td><%= image_tag pin.image.url(:medium) %></pd>
+        <td><%= pin.description %></td>
+        <td><%= pin.user.email if pin.user %></td>
+        <td><%= link_to 'Show', pin %></td>
+        <% if pin.user == current_user %>
+          <td><%= link_to 'Edit', edit_pin_path(pin) %></td>
+          <td><%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<% if user_signed_in? %>
+  <%= link_to 'New Pin', new_pin_path %>
+<% end %>
+
+```
+
+
+## 10. Commit changes
+```
+git add .
+git commit -am "Add image upload with Paperclip"
+git push
+git config --global push.default matching
+```
+
+-----
 
