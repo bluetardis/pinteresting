@@ -2452,6 +2452,12 @@ You should get a response including something about ImageMagick's version.
 # PaperClip Gem Installation & Configuration
 Paperclip is a gem that allows you to upload images
 
+
+Later we will replace with this as it moves the files direct to S3 without needing to save locally.
+[https://devcenter.heroku.com/articles/direct-to-s3-image-uploads-in-rails](https://devcenter.heroku.com/articles/direct-to-s3-image-uploads-in-rails)
+
+
+
 ## 1. Install the paperclip gem 
 [https://github.com/thoughtbot/paperclip](https://github.com/thoughtbot/paperclip)
 
@@ -2671,6 +2677,10 @@ Example of file with the changes made
 git add .
 git commit -am "Add image upload with Paperclip"
 git push
+```
+
+### only needed if you get an error in above
+```
 git config --global push.default matching
 ```
 
