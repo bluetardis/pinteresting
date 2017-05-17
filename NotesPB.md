@@ -2685,21 +2685,25 @@ git config --global push.default matching
 ```
 
 -----
-# Connecting Amazon/S3/AWS Gem (v1)
-Heroku doesn't store images, so you need AWS for that
+# Connecting Amazon/S3/AWS Gem 
+Heroku doesn't store images, so you need AWS for that.  There are two versions of the GEM (v1 and v2).  We are going to be using the v2 version hard coded to v1.  In a later project we will build from scratch with v2.
 
-### Resources
-[Paperclip Documentation:](https://devcenter.heroku.com/articles/paperclip-s3)
+### Resources:
+[Paperclip Documentation](https://devcenter.heroku.com/articles/paperclip-s3)
+[AWS SDK V1](https://github.com/aws/aws-sdk-ruby/tree/aws-sdk-v1)
+[AWS SDK v2](https://github.com/aws/aws-sdk-ruby)
+[Migration](https://github.com/aws/aws-sdk-ruby/blob/master/MIGRATING.md)
 
 ## 1. Add the Amazon AWS Gem
 */Gemfile*
 
 gem 'aws-sdk', '< 2.0'
-Note: This is different from the video! So far you've seen us use gem 'blah', '~> 3.1' but we want to make sure we use the newest version of the aws-sdk gem BELOW the 2.0 release. This is because major updates (like moving from 1.x to 2.0) can break specific functionality we're using, and it's a pain to go back and fix. 
+We want to make sure we use the newest version of the aws-sdk gem BELOW the 2.0 release. 
+This is because major updates (like moving from 1.x to 2.0) can break specific functionality we're using, and it's a pain to go back and fix. 
 
 And run bundle install:
-
 $ bundle install 
+
 2. Add S3 credential placeholders
 config/environments/production.rb
 
