@@ -32,6 +32,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # PaperClip
 gem 'paperclip', '~> 4.2'
 
+#AWS SDK
+gem 'aws-sdk', '< 2.0' #This is using the v2 SDK but forcing <v2 for compatibility with the tutorial
+
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

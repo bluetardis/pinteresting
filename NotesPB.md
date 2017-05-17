@@ -2686,7 +2686,8 @@ git config --global push.default matching
 
 -----
 # Connecting Amazon/S3/AWS Gem 
-Heroku doesn't store images, so you need AWS for that.  There are two versions of the GEM (v1 and v2).  We are going to be using the v2 version hard coded to v1.  In a later project we will build from scratch with v2.
+Heroku doesn't store images on the dynamos, so you need AWS (external storage) for that.  
+There are two versions of the GEM (v1 and v2).  We are going to be using the v2 version hard coded to v1.  In a later project we will build from scratch with v2.
 
 ### Resources:
 [Paperclip Documentation](https://devcenter.heroku.com/articles/paperclip-s3)
@@ -2696,17 +2697,27 @@ Heroku doesn't store images, so you need AWS for that.  There are two versions o
 
 ## 1. Add the Amazon AWS Gem
 */Gemfile*
-
+```
 gem 'aws-sdk', '< 2.0'
+```
 We want to make sure we use the newest version of the aws-sdk gem BELOW the 2.0 release. 
 This is because major updates (like moving from 1.x to 2.0) can break specific functionality we're using, and it's a pain to go back and fix. 
 
-And run bundle install:
-$ bundle install 
+### Install with bundle install
+```
+bundle install
+```
 
-2. Add S3 credential placeholders
-config/environments/production.rb
 
+## 2. Add S3 credential placeholders
+This tells Rails PRODUCTION, PaperClip that we want to use S3 for Storage.
+
+This are telling Heroku to use Environment Variables.  We will set these specifically for Heroku shortly.
+This is added at the end of the file.
+
+*config/environments/production.rb*
+
+```
 config.paperclip_defaults = {
   :storage => :s3,
   :s3_credentials => {
@@ -2715,26 +2726,68 @@ config.paperclip_defaults = {
     :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
   }
 }
-Note: The video uses "AWS_BUCKET" for the first variable. This has since been changed to "S3_BUCKET_NAME" so make sure you use the right one. We have more info in the Troubleshooting tab about the error you'll see if you do it wrong.
+```
 
-3. Sign up for an AWS account  
-http://aws.amazon.com/
 
-This may want a credit card number for you, but it does have a free version. If you don't have a credit card or don't feel comfortable giving them your information, you can use a prepaid credit card, or ask your credit card company to issue you a disposable CC number.
+## 3. Sign up for an AWS account  
+Should you require an account. (We already have one for these projects for now.)
 
-4. Create an S3 bucket in AWS  
-Make sure you use the "US Standard" region when creating your bucket, or you will get errors.
+Resources:
+[AWS](http://aws.amazon.com/)
+[Login](https://aws.amazon.com/console/)
 
-5. Grant permission to everyone  
-Actions -> Permissions
 
-6. Configure Heroku for AWS  
-$ heroku config
-$ heroku config:set AWS_BUCKET=pinteresting
-$ heroku config
-$ heroku config:set AWS_ACCESS_KEY_ID=***GET FROM AMAZON AWS***
-$ heroku config:set AWS_SECRET_ACCESS_KEY=***GET FROM AMAZON AWS***
-$ heroku config
+## 4. Create an S3 bucket in AWS  
+We need to create / configure the bucket so we can set this in heroku.
+
+
+## 5. Grant permission to everyone  
+
+### Add/edit Bucket policy that allows read.
+We need to fix the Resource Name below.
+
+Note for this we are adding additinal permissions to the folder to allow Upload/Delete/etc.
+
+```
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::tripcashdev/*"
+        }
+    ]
+}
+```
+
+### Configure the Permissions for the Folder (or Bucket) to Allow Read/Write
+* S3 Management Console
+* Permissions
+* Select Object (Folder/Bucket)
+* Everyone
+* Read / Write
+
+## 6. Configure Heroku for AWS  
+
+See what the variables are at present:
+```
+heroku config
+```
+
+Set the variables we need:
+```
+heroku config:set S3_BUCKET_NAME=***GET FROM AMAZON AWS***
+heroku config:set AWS_ACCESS_KEY_ID=***GET FROM AMAZON AWS***
+heroku config:set AWS_SECRET_ACCESS_KEY=***GET FROM AMAZON AWS***
+heroku config
+```
+
+
 7. Add, commit and push to Git and Heroku 
 $ git add --all
 $ git commit -am "Add Amazon S3 for Paperclip uploads to Heroku"
