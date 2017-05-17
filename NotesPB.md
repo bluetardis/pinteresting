@@ -3003,6 +3003,8 @@ $ ->
 * tell it how to find the item selector
 * tell it we must fit within the defined width.
 
+http://guides.rubyonrails.org/working_with_javascript_in_rails.html#how-turbolinks-works
+
 
 */app/assets/javascripts/pins.coffee*
 
@@ -3091,6 +3093,93 @@ git commit -am "Added jQuery masonry"
 git push
 ```
 
+
+-----
+
+# Tweaks to Index Page and Niceties
+
+* Click on picture to get to the page
+* Add some icons to make it nicer
+* Add pagination to the page load
+* Prep for user profiles
+
+### Resources
+[Bootstrap Panels](http://getbootstrap.com/components/#panels)
+
+
+## 1. Update our Pins index for clickable images  
+* Add a link_to the existing image_tag:       <%= link_to image_tag(pin.image.url(:medium)), pin %>
+* Remove the 'Show' and its link as its now redudant.
+* Add the Edit/Destroy in a new div called actions.           <div class="actions">
+* Wrap the description and email in <p> tags so they get new lines
+* Style the user email in bold <strong>
+
+Basically we are moving the existing line with the link_to and replaceing the 'Show' with the image.  We need to wrap it in parenthesis so rails knows what we want exactly.
+
+*/app/views/pins/index.html.erb*
+
+```
+<div id="pins" class="transitions-enabled">
+  <% @pins.each do |pin| %>
+    <div class="box panel panel-default">
+      <%= link_to image_tag(pin.image.url(:medium)), pin %>
+      <div class="panel-body">
+        <p<%= pin.description %></p>
+        <strong><%= pin.user.email if pin.user %></strong>
+        <% if pin.user == current_user %>
+          <div class="actions">
+            <%= link_to 'Edit', edit_pin_path(pin) %>
+            <%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+```
+
+## 2. Update our Pins show page for styling 
+
+* Move the back link to the top of the page.
+* remove the '|' from the Edit line.
+* Add a div class row to the rest so we can format (center and offset).  This needs 2 lines (class="row", class="col-md-offset-2 etc.")
+* Add it to a bootstrap panel 
+* Configure the panel heading and body
+* Remove the Description tag
+* Add the user (have to update to @pin )
+* Wrap the description and email in <p> tags so they get new lines
+* Replace the :medium from the image with :large after adding to pin.rb
+
+### Note if you want a new image size that doesnt exist you need to edit the model.rb file and then regen missing styles
+```
+rake paperclip:refresh:missing_styles
+```
+
+
+*/app/views/pins/show.html.erb*
+
+```
+<%= link_to 'Back', pins_path %>
+
+<div class="row">
+  <div class="col-md-offset-2 col-md-8">
+    <div class="panel panel-default">
+      <div class="panel-heading center">
+        <%= image_tag @pin.image.url(:large) %>
+      </div>
+      <div class="panel-body">
+        <p><%= @pin.description %></p>
+        <p><strong><%= @pin.user.email if @pin.user %></strong></p>
+
+        <% if @pin.user == current_user %>
+         <%= link_to 'Edit', edit_pin_path(@pin) %>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+```
 
 -----
 
