@@ -99,14 +99,13 @@ Rails.application.configure do
   
   #This tells Rails PRODUCTION, PaperClip that we want: to use S3 for Storage.
   config.paperclip_defaults = {
-  :storage => :s3,
-  :s3_region => ENV['AWS_REGION'],
-  :s3_credentials => {
-    :bucket => ENV['S3_BUCKET_NAME'],
-    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
-    :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+        :storage => :s3,
+        :s3_region => ENV['AWS_REGION'],
+        :s3_credentials => {
+          :bucket => ENV['AWS_BUCKET'],
+          :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+          :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
   }
-}
 
 
 end
