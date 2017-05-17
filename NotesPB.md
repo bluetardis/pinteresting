@@ -2457,7 +2457,7 @@ You should get a response including something about ImageMagick's version.
 Paperclip is a gem that allows you to upload images
 
 
-Later we will replace with this as it moves the files direct to S3 without needing to save locally.
+Later we want to replace with this as it moves the files direct to S3 without needing to save locally.
 [https://devcenter.heroku.com/articles/direct-to-s3-image-uploads-in-rails](https://devcenter.heroku.com/articles/direct-to-s3-image-uploads-in-rails)
 
 
@@ -2691,7 +2691,11 @@ git config --global push.default matching
 -----
 # Connecting Amazon/S3/AWS Gem 
 Heroku doesn't store images on the dynamos, so you need AWS (external storage) for that.  
-There are two versions of the GEM (v1 and v2).  We are going to be using the v2 version hard coded to v1.  In a later project we will build from scratch with v2.
+There are two versions of the GEM (v1 and v2).  
+We are going to be using the v2 version hard coded to v1.  In a later project we might build from scratch with v2.
+
+Note: The Bucket gets used as the initial placeholder.  Under the bucket, the models and information required is stored eg *sandpit123/pins*
+
 
 ### Resources:
 [Paperclip Documentation](https://devcenter.heroku.com/articles/paperclip-s3)
@@ -2716,6 +2720,8 @@ bundle install
 ## 2. Add S3 credential placeholders
 This tells Rails PRODUCTION, PaperClip that we want to use S3 for Storage.
 
+[Reference Doco](http://www.rubydoc.info/gems/paperclip/Paperclip/Storage/S3)
+
 This are telling Heroku to use Environment Variables.  We will set these specifically for Heroku shortly.
 This is added at the end of the file.
 
@@ -2733,7 +2739,6 @@ This is added at the end of the file.
       :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
-
 
 ```
 
@@ -2788,7 +2793,7 @@ See what the variables are at present:
 heroku config
 ```
 
-Set the variables we need:
+### Set the variables we need:
 ```
 heroku config:set S3_BUCKET_NAME=***GET FROM AMAZON AWS***
 heroku config:set AWS_ACCESS_KEY_ID=***GET FROM AMAZON AWS***
@@ -2796,13 +2801,15 @@ heroku config:set AWS_SECRET_ACCESS_KEY=***GET FROM AMAZON AWS***
 heroku config
 ```
 
-Fix the region
+### Fix the region
 Ref for [AWS Region Names](http://docs.aws.amazon.com/general/latest/gr/rande.html#opsworks_region)
+
+#### Notes:
+* v1 of the AWS SDK uses AWS_HOSTNAME for a fqdn.
+* v2 of the AWS SDK uses  AWS_REGION or s3_region and will require testing
+
 *Sydney = ap-southeast-2*
 
-**Notes:**
-v1 of the AWS SDK uses AWS_HOSTNAME for a fqdn.
-v2 of the AWS SDK uses  AWS_REGION or s3_region and will require testing
 
 
 ```
@@ -2829,5 +2836,257 @@ heroku rake db:migrate
 heroku open
 ```
 -----
-https://s3-ap-southeast-2.amazonaws.com/sandpit123/pins/images/000/000/003/medium/25.jpg
- http://s3.amazonaws.com/sandpit123/pins/images/000/000/007/medium/25.jpg?1494988447
+
+# Styling App with jQuery Masonry
+
+*Giving our application that Pinterest look with jQuery Masonry.*
+
+Update: Turbolinks can cause a lot of JavaScript errors later on, so we're recommending it not be used in your app.
+Since normal Rails apps come with Turbolinks pre-installed, you should follow the instructions in this blog post to remove them. There's also a few updates here in the lesson notes in steps 1 and 9, so keep an eye out. 
+**PB is leaving turbolinks in for now**
+
+
+### Resources
+* [jQuery Masonry](http://masonry.desandro.com/()
+* [jQuery Masonry Gem](https://github.com/kristianmandrup/masonry-rails)
+* [jQuery Turbolinks Gem](https://github.com/kossnocorp/jquery.turbolinks) - we're potentially not going to use this
+
+
+## 1. Add the Masonry and Turbolinks gems  
+*/Gemfile*
+
+### Masonry Gem
+
+Bottom of list before environments.
+```
+gem 'masonry-rails', '~> 0.2.0'
+```
+
+### jquery-turbolinks
+
+This goes after turbolinks
+```
+gem 'jquery-turbolinks' # don't add this if you're removing Turbolinks
+```
+
+
+## 2. Always bundle install to install a new gem  
+
+*terminal*
+* Stop the Server
+* Install
+* Restart the server
+
+```
+bundle install
+rails server -p $PORT -b $IP
+```
+
+
+## 3. Modify our application.js file  
+*/app/assets/javascripts/application.js*
+**Note refer to the doco for more options**
+This gets loaded on every page eg under */app/views/layouts/application.html.erb* - javascript_include_tag
+
+Q: What is jquery.imagesloaded.min? 
+A: It's a jQuery plugin that triggers a callback after all images have been loaded, which Masonry likes to use.
+
+The change is made after turbolinks and before the require_tree
+
+```
+//= require masonry/jquery.masonry
+//= require masonry/jquery.imagesloaded.min
+```
+
+
+## 4. Modify our application.css file  
+*/app/assets/stylesheets/application.css*
+**Note refer to the doco for more options**
+This gets loaded on every page eg under */app/views/layouts/application.html.erb* - stylesheet_link_tag
+
+
+```
+ *= require 'masonry/transitions'
+```
+
+
+## 5. Update our Pins Index  
+*/app/views/pins/index.html.erb*
+
+Complete rework of the page:
+* remove header
+* remove the table
+* move the if user_sign_in to the header partial (next step)
+* cleanup the rest of the table stuff eg the <tr> (table row tags) 
+* remove the <br> at the end
+* wrap the entire file in a div of id pins <div id="pins">
+* make a new pin class of "box" and enclose each pin     <div class="box">
+* We will create styling for this under stylesheets shortly. (pins.css.scss)
+
+
+```
+<div id="pins">
+  <% @pins.each do |pin| %>
+    <div class="box">
+      <%= image_tag pin.image.url(:medium) %>
+      <%= pin.description %>
+      <%= pin.user.email if pin.user %>
+      <%= link_to 'Show', pin_path(pin) %>
+      <% if pin.user == current_user %>
+        <%= link_to 'Edit', edit_pin_path(pin) %>
+        <%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+```
+
+
+## 6. Adding Pins directly from the header  
+*/app/views/layouts/_header.html.erb*
+We are placing this under the logic for user_signed_in? above Account Settings
+
+```
+.
+.
+.
+     <li><%= link_to 'New Pin', new_pin_path %></li>
+.
+.
+.
+```
+
+
+## 7. Update our Pins stylesheet for Masonry CSS  
+*/app/assets/stylesheets/pins.css.scss*
+
+This file might not exist and need to be created.
+
+* Center the pins
+* define the box styling for the box tags
+* fit the img to the box above (force the fit)
+
+```
+.
+.
+.
+#pins {
+  margin: 0 auto;
+}
+
+.box {
+  margin: 5px;
+  width: 214px;
+}
+
+.box img {
+  width: 100%;
+}
+```
+
+## 7. Update our Pins JavaScript for Masonry  
+We are styling pins so will add it to the pins.coffee file in assets/javascripts.
+Rails needs javascript to be seperate to the page so we write it in this file and then tell rails to load it on the page.
+
+**Note: you need to use either spaces or TABS but dont mix**
+
+This is done via the 
+```
+$ ->
+```
+
+##What are we doing in jQuery? ##
+
+* Cycle through the pins on the page
+* once the images are loaded
+* call the jQuery Masonry for that pin
+* tell it how to find the item selector
+* tell it we must fit within the defined width.
+
+
+*/app/assets/javascripts/pins.coffee*
+
+```
+.
+.
+.
+$ ->
+  $('#pins').imagesLoaded ->
+    $('#pins').masonry
+      itemSelector: '.box'
+      isFitWidth: true
+```
+
+
+## 9. Modify our application.js file for jQuery Turbolinks  
+This way it forces a reload if we have changed the page.
+
+Note the doco: it muse be loaded after jquery and before turbolinks.
+//= require jquery.turbolinks
+
+*/app/assets/javascripts/application.js*
+
+**Don't do this step if you're removing Turbolinks.**
+
+```
+//= require jquery
+//= require jquery_ujs
+//= require jquery.turbolinks
+//= require bootstrap
+//= require turbolinks
+//= require masonry/jquery.masonry
+//= require masonry/jquery.imagesloaded.min
+//= require_tree .
+```
+
+## 10. Update our Pins Index View for transitions and styling (animation)
+*/app/views/pins/index.html.erb*
+
+* Turn animation on with: <div id="pins" class="transitions-enabled">
+* IMAGE: style the div box class with bootstrap:     <div class="box panel panel-default"> 
+* OTHER: Style the body:       <div class="panel-body">
+
+
+
+```
+<div id="pins" class="transitions-enabled">
+  <% @pins.each do |pin| %>
+    <div class="box panel panel-default">
+      <%= image_tag pin.image.url(:medium) %>
+      <div class="panel-body">
+        <%= pin.description %>
+        <%= pin.user.email if pin.user %>
+        <%= link_to 'Show', pin_path(pin) %>
+        <% if pin.user == current_user %>
+          <%= link_to 'Edit', edit_pin_path(pin) %>
+          <%= link_to 'Destroy', pin, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+```
+
+
+## 11. Git Dance
+Save and setup
+
+```
+git status
+git add --all
+git commit -am "Added jQuery masonry"
+git push
+```
+
+## 12. Add to the .gitignore file  
+*/.gitignore*
+
+```
+.
+.
+.
+/public/system/*
+```
+
+-----
+
