@@ -901,8 +901,12 @@ heroku keys:add
 ```
 
 ## Create a new heroku app
+Check out the regions first as you probably want the app where you store your data/s3.
+[Heroku Regions Info](https://devcenter.heroku.com/articles/regions)
+
 ```
-heroku create 
+heroku create --generic create (probably dont want this)
+heroku create --region sydney ##Put it in sydney
 ```
 
 ## Heroku Database Stuff
@@ -2718,8 +2722,9 @@ This is added at the end of the file.
 *config/environments/production.rb*
 
 ```
-config.paperclip_defaults = {
+  config.paperclip_defaults = {
   :storage => :s3,
+  :s3_region => ENV['AWS_REGION'],
   :s3_credentials => {
     :bucket => ENV['S3_BUCKET_NAME'],
     :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
@@ -2787,10 +2792,31 @@ heroku config:set AWS_SECRET_ACCESS_KEY=***GET FROM AMAZON AWS***
 heroku config
 ```
 
+Fix the region
+Ref for [AWS Region Names](http://docs.aws.amazon.com/general/latest/gr/rande.html#opsworks_region)
+*Sydney = ap-southeast-2*
 
-7. Add, commit and push to Git and Heroku 
-$ git add --all
-$ git commit -am "Add Amazon S3 for Paperclip uploads to Heroku"
-$ git push
-$ git push heroku master
-$ heroku open
+```
+heroku config:set AWS_REGION=ap-southeast-2
+heroku config
+```
+
+
+
+## 7. Add, commit and push to Git and Heroku 
+### Git Stuff
+```
+git add --all
+git commit -am "Add Amazon S3 for Paperclip uploads to Heroku"
+git push
+git push heroku master
+```
+
+### Heroku Cleanup
+```
+heroku rake db:reset
+heroku rake db:migrate
+heroku open
+```
+-----
+https://s3-ap-southeast-2.amazonaws.com/sandpit123/pins/images/000/000/003/medium/25.jpg
