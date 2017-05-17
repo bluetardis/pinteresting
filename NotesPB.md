@@ -2724,14 +2724,16 @@ This is added at the end of the file.
 ```
   #This tells Rails PRODUCTION, PaperClip that we want: to use S3 for Storage.
   config.paperclip_defaults = {
-        :storage => :s3,
-        :s3_region => ENV['AWS_REGION'],
-        :s3_credentials => {
-          :bucket => ENV['AWS_BUCKET'],
-          :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
-          :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
-        }
+    :storage => :s3,
+    :s3_region => ENV['AWS_REGION'],
+    :s3_host_name => ENV['AWS_HOSTNAME'],
+    :s3_credentials => {
+      :bucket => ENV['S3_BUCKET_NAME'],
+      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+    }
   }
+
 
 ```
 
@@ -2798,8 +2800,14 @@ Fix the region
 Ref for [AWS Region Names](http://docs.aws.amazon.com/general/latest/gr/rande.html#opsworks_region)
 *Sydney = ap-southeast-2*
 
+**Notes:**
+v1 of the AWS SDK uses AWS_HOSTNAME for a fqdn.
+v2 of the AWS SDK uses  AWS_REGION or s3_region and will require testing
+
+
 ```
 heroku config:set AWS_REGION=ap-southeast-2
+heroku config:set AWS_HOSTNAME=s3-ap-southeast-2.amazonaws.com
 heroku config
 ```
 
