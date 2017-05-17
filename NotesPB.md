@@ -2685,4 +2685,55 @@ git config --global push.default matching
 ```
 
 -----
+# Connecting Amazon/S3/AWS Gem (v1)
+Heroku doesn't store images, so you need AWS for that
 
+### Resources
+[Paperclip Documentation:](https://devcenter.heroku.com/articles/paperclip-s3)
+
+## 1. Add the Amazon AWS Gem
+*/Gemfile*
+
+gem 'aws-sdk', '< 2.0'
+Note: This is different from the video! So far you've seen us use gem 'blah', '~> 3.1' but we want to make sure we use the newest version of the aws-sdk gem BELOW the 2.0 release. This is because major updates (like moving from 1.x to 2.0) can break specific functionality we're using, and it's a pain to go back and fix. 
+
+And run bundle install:
+
+$ bundle install 
+2. Add S3 credential placeholders
+config/environments/production.rb
+
+config.paperclip_defaults = {
+  :storage => :s3,
+  :s3_credentials => {
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+  }
+}
+Note: The video uses "AWS_BUCKET" for the first variable. This has since been changed to "S3_BUCKET_NAME" so make sure you use the right one. We have more info in the Troubleshooting tab about the error you'll see if you do it wrong.
+
+3. Sign up for an AWS account  
+http://aws.amazon.com/
+
+This may want a credit card number for you, but it does have a free version. If you don't have a credit card or don't feel comfortable giving them your information, you can use a prepaid credit card, or ask your credit card company to issue you a disposable CC number.
+
+4. Create an S3 bucket in AWS  
+Make sure you use the "US Standard" region when creating your bucket, or you will get errors.
+
+5. Grant permission to everyone  
+Actions -> Permissions
+
+6. Configure Heroku for AWS  
+$ heroku config
+$ heroku config:set AWS_BUCKET=pinteresting
+$ heroku config
+$ heroku config:set AWS_ACCESS_KEY_ID=***GET FROM AMAZON AWS***
+$ heroku config:set AWS_SECRET_ACCESS_KEY=***GET FROM AMAZON AWS***
+$ heroku config
+7. Add, commit and push to Git and Heroku 
+$ git add --all
+$ git commit -am "Add Amazon S3 for Paperclip uploads to Heroku"
+$ git push
+$ git push heroku master
+$ heroku open
