@@ -3183,3 +3183,96 @@ rake paperclip:refresh:missing_styles
 
 -----
 
+# Adding icons with Glyphicons
+
+Cool icons from Bootstrap. Locate the icon from the resources below and implement with the span class
+
+### Resources
+[Bootstrap Glyphicons](http://getbootstrap.com/components/#glyphicons)
+
+**Note - bootstrap examples that include dots . indicate it should be a class**
+
+## 1. Add Glyphicons to the header partial
+We are placing this where the New Pin etc lines go and as per the bootstrap instructions using a <SPAN> class
+
+There are various ways we could do this.
+
+### Using Raw to show it inline (Raw tells rails to process vs show) 
+This is effectively concatenating the text.
+```
+<li><%= link_to raw('<span class="glyphicon glyphicon-plus"></span> New Pin'), new_pin_path %></li>
+```
+
+### Use a block (clearer code)
+We can spread it out over multiple lines:
+* Where is the link going
+* details
+* end
+
+```
+<li>
+  <%= link_to new_pin_path do %>
+    <span class="glyphicon glyphicon-plus"></span> New Pin
+  <% end %>
+</li>
+```
+
+
+*/app/views/layouts/_header.html.erb*
+Example with additional code shown to get context.
+```
+        <!-- Show a signin or logout as appropriate -->
+        <% if user_signed_in? %>
+            <li>
+              <%= link_to new_pin_path do %>
+                <span class="glyphicon glyphicon-plus"></span> New Pin
+              <% end %>
+            </li>
+            <li><%= link_to "Account Settings", edit_user_registration_path %></li>
+            <li><%= link_to "Log out", destroy_user_session_path, method: :delete %></li>
+        <% else %>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+        <% end %> <!-- logic for user session -->
+```
+
+
+## 2. Add Glyphicons to the Pin index  View
+Same as above but different icons. For edit and delete.  
+Also change destroy to delete
+
+*/app/views/pins/index.html.erb*
+
+```
+            <%= link_to edit_pin_path(pin) do %>
+              <span class="glyphicon glyphicon-edit"></span>
+              Edit
+            <% end %>
+            
+            <%= link_to pin, method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <span class="glyphicon glyphicon-trash"></span>
+              Delete
+            <% end %>
+```
+
+
+
+## 3. Add Glyphicons to the show page  
+As per above for edit on the single pin view
+
+*/app/views/pins/show.html.erb*
+```
+      <%= link_to edit_pin_path(@pin) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        Edit
+      <% end %>
+```
+
+
+## 4. Add Glyphicons URL - not in video
+UPDATE: One of Chrome's updates messed up the Glyphicons, and it's been broken for months. Here is the fix:
+
+app/assets/stylesheetsbootstrap_and customization.css.scss
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css");
