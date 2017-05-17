@@ -3018,7 +3018,7 @@ $ ->
 ```
 
 
-## 9. Modify our application.js file for jQuery Turbolinks  
+## 8. Modify our application.js file for jQuery Turbolinks  
 This way it forces a reload if we have changed the page.
 
 Note the doco: it muse be loaded after jquery and before turbolinks.
@@ -3039,7 +3039,7 @@ Note the doco: it muse be loaded after jquery and before turbolinks.
 //= require_tree .
 ```
 
-## 10. Update our Pins Index View for transitions and styling (animation)
+## 9. Update our Pins Index View for transitions and styling (animation)
 */app/views/pins/index.html.erb*
 
 * Turn animation on with: <div id="pins" class="transitions-enabled">
@@ -3067,6 +3067,18 @@ Note the doco: it muse be loaded after jquery and before turbolinks.
 </div>
 ```
 
+## 10. Add to the .gitignore file  
+Currently the images being uploaded to dev are being stored in "/public/system" and we dont want this stored.
+
+*/.gitignore*
+
+```
+.
+.
+.
+/public/system/*
+```
+
 
 ## 11. Git Dance
 Save and setup
@@ -3078,15 +3090,6 @@ git commit -am "Added jQuery masonry"
 git push
 ```
 
-## 12. Add to the .gitignore file  
-*/.gitignore*
-
-```
-.
-.
-.
-/public/system/*
-```
 
 -----
 

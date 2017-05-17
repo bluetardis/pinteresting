@@ -3,7 +3,10 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
+ready = ->
   $('#pins').imagesLoaded ->
     $('#pins').masonry
       itemSelector: '.box'
       isFitWidth: true
+$(document).ready(ready)
+$(document).on('page:load', ready)
