@@ -5,7 +5,10 @@ class PinsController < ApplicationController
   # GET /pins
   # GET /pins.json
   def index
-      @pins = Pin.all
+     # @pins = Pin.all # original
+     
+     #active record query - created_at descending order.
+      @pins = Pin.all.order("created_at DESC")
   end
 
   # GET /pins/1

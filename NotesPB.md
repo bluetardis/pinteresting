@@ -3424,3 +3424,56 @@ git push heroku master
 -----
 
 
+# Re Order Pins (or other)
+Reorder the pins on the index page so that they show up reverse-chronologically. We'll also explore other Active Record queries.
+
+## 1. Active Record queries  
+[http://guides.rubyonrails.org/active_record_querying.html](http://guides.rubyonrails.org/active_record_querying.html)
+
+* order
+* limit
+* find_by
+* etc.
+
+To check what fields we can use...take a look at */db/schema.rb*
+
+### Note
+These can be chained with . so for example 
+
+**Get the pins in descending order by created_at**
+```
+@pins = Pin.all.order("created_at DESC")
+```
+
+As above Limit the results.
+```
+@pins = Pin.all.order("created_at DESC").limit(3)
+```
+
+
+
+## 2. Update Pins Controller  
+
+We need to locate the ```index```
+
+*app/controllers/pins_controller.rb*
+
+```
+..
+  def index
+     # @pins = Pin.all # original
+     
+     #active record query - created_at descending order.
+      @pins = Pin.all.order("created_at DESC")
+  end
+..
+```
+
+
+## 3. Commit to Git  
+```
+git add .
+git commit -am "Load pins in index action in reverse chronological order"
+```
+
+
