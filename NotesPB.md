@@ -255,7 +255,7 @@ We will add the routes later.
 
 ```
 
-----
+-----
 # A note on SEO 
 *Search Engine Optimisation*
 
@@ -345,7 +345,7 @@ This is the template that is the "theme" or for all pages.
 Place this before the *<%= yield %>* if you want it as a header.
 
 
-------
+-----
 # Bootstrap Installation and Initial Integration
 
 ## Resources
@@ -415,7 +415,7 @@ So find it *CTRL-C* and then
 rails server -p $PORT -b $IP
 ```
 
-------
+-----
 # Bootstrap Customization Part1
 
 ## What can I do?
@@ -3751,4 +3751,60 @@ git commit -am "Added Names to users"
 ```
 
 
+-----
+
+# Validation for fields 
+
+Validations are the Rails way of making sure that the data your users are putting into forms are good. You can use validations to make sure that a user actually gives you their name, that their email address is actually an email address, and other things.
+
+## 1. Active Record Validations - Making sure name isn’t blank
+[Active Record Validations Documentation](http://edgeguides.rubyonrails.org/active_record_validations.html)
+
+### Validating the presence of a name
+```
+  validates :name, presence: true
+```
+
+*app/models/user.rb*
+
+### Updated example file
+```
+class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  
+  validates :password,  :presence => true,
+                        :confirmation => true,
+                        :length => {:within => 8..40},
+                        :on => :create,
+                        #:format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\Z/ }
+                        :format => {:with => /\A.*(?=.{08,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*\Z/ }
+                        
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+  
+  validates :name, presence: true
+         
+  has_many :pins
+end
+
+```
+
+
+## 2. Add validation for pins 
+
+*app/models/pin.rb*
+
+```
+.
+.
+.
+  validates :image, presence: true
+  validates :description, presence: true
+.
+.
+.
+```
+
+-----
 
