@@ -149,6 +149,23 @@ We can go edit the files
 rails destroy whatever blah blah
 ```
 
+## Commenting in .erb files
+[ERB Formatting etc.](https://docs.puppet.com/puppet/4.10/lang_template_erb.html)
+
+Use the following.  This can be placed either in line or to comment on a single line
+
+Its a good idea to comment start and end of blocks as they can get complicated later.
+
+
+```
+    <!== Prompt them to Login or SignUp -->
+```
+
+or
+
+```<%# COMMENT %>``` Removed from the final output.
+
+
 -----
 # Set the Root Path with Routes
 We need to go tell Rails how to route pages.
@@ -3269,6 +3286,7 @@ As per above for edit on the single pin view
 
 
 ## 4. Add Glyphicons URL for Chrome (if needed)
+This is only needed if chrome looks like not loading Glyhicons.  Not an issue 2017-05
 
 *app/assets/stylesheetsbootstrap_and_customization.css.scss*
 ```
@@ -3278,4 +3296,120 @@ As per above for edit on the single pin view
 ```
 
 -----
+
+# Changing the Root Route
+
+In this APP, the pins should display on the homepage.
+To do some we are going to make the pins index view the home page and change the home page to be included as a partial when needed.
+
+## 1. Change our routes so the root goes to Pins  
+*/config/routes.rb*
+
+```
+.
+.
+.
+  root "pins#index"
+.
+.
+.
+```
+
+## 2. Make Home a partial  
+
+### Why/Logic?
+We want to keep the functionality that was already in the old home.
+To do this we will rename display as a partial
+
+**Rename**
+```
+/app/views/pages/home.html.erb
+```
+
+**To**
+```
+/app/views/pages/_home.html.erb
+```
+
+
+
+## 3. Render the new Home partial on Pins index  
+We want to render the Welcome/Prompt if the user hasnt logged in.  
+Edit the view for the Pins Index and place this where we want it (at the top in this case.)
+
+*/app/views/pins/index.html.erb*
+
+```
+<%= render 'pages/home' unless user_signed_in? %>
+.
+.
+.
+```
+## Notes on if/unless
+### Render on NOT signed in? (unless)
+We want to render if the user hasnt signed in. In rails this is using unless.
+```
+unless user_signed_in?
+```
+### Render on user signed in? (if)
+We want to render ONLY IF the user has signed in. In rails this is using if.
+```
+if user_signed_in?
+```
+
+### Cleanup the old logic in _home.html.erb
+We have changed the logic to only show this if the user hasnt logged in so we can remove the logic in the file...
+
+#### Old file
+```
+<div class="jumbotron">
+  <h1>Welcome</h1>
+  <p>Spicy jalapeno bacon ipsum dolor amet jowl dolor eu andouille turducken ribeye adipisicing meatloaf burgdoggen labore. Aliqua salami in hamburger pork chop dolore. Ut prosciutto in boudin, pariatur est dolore. Excepteur ut ham short loin ad laborum pork loin meatball short ribs. Ham et velit tenderloin beef ribs. Lorem turducken meatball, duis bresaola meatloaf fugiat ut mollit tri-tip tempor pig minim.
+</p>
+
+  <% if user_signed_in? %>
+    <!== do something for our signed in users -->
+    <p></p>  
+    <p>Thanks for signing in :-)</p>    
+  <% else %>
+    <!== Prompt them to Login or SignUp -->
+    <p></p>
+    <p>
+      <%= link_to "Log in", new_user_session_path,  class: "btn btn-default btn-lg" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+    </p>
+  <% end %>  <!== user_sign_in block -->
+</div>
+
+```
+
+#### Updated file
+```
+<div class="jumbotron">
+  <h1>Welcome</h1>
+  <p>Spicy jalapeno bacon ipsum dolor amet jowl dolor eu andouille turducken ribeye adipisicing meatloaf burgdoggen labore. Aliqua salami in hamburger pork chop dolore. Ut prosciutto in boudin, pariatur est dolore. Excepteur ut ham short loin ad laborum pork loin meatball short ribs. Ham et velit tenderloin beef ribs. Lorem turducken meatball, duis bresaola meatloaf fugiat ut mollit tri-tip tempor pig minim.
+</p>
+
+    <!== Prompt them to Login or SignUp -->
+    <p></p>
+    <p>
+      <%= link_to "Log in", new_user_session_path,  class: "btn btn-default btn-lg" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+    </p>
+</div>
+```
+
+
+## 4. The git dance
+Push to github and heroku
+
+```
+git add .
+git commit -am "Update show view and change root path"
+git push
+git push heroku master
+```
+
+-----
+
 
