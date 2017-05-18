@@ -3646,8 +3646,14 @@ heroku run rake db:migrate
 ```
 
 
-## 3. Prompt for more info on next login
+## 3. Edit the devise page to add names
 Edit devise account settings to ask users for names when they sign up  
+
+Copy a form-group and amend as needed.
+
+* change the label 
+* confirm the field type
+* change the name 
 
 *app/views/devise/registrations/edit.html.erb*
 
@@ -3665,13 +3671,36 @@ Edit devise account settings to ask users for names when they sign up
 ```
 
 
-## 4. "White label" attribute on form for strong parameters  
+## 4. Update permitted parameters (security + allow name)
+
+We are using devise so this needs an update to "White label" attribute on form for strong parameters  
+
 [Devise Strong Parameters Documentation](https://github.com/plataformatec/devise#strong-parameters)
+
+**Note** We need to figure out which methods need to be updated.eg
+
+* sign_in
+* sign_up
+* account_update
+
 
 ### Define a method in application controller to run with a before action
 
+We are going to run this in the core application_controller so it runs globally under the conditions we want.
+**We need it to run for sign_up  and account_update.**
+
 *app/controllers/application_controller.rb*
 
+#### Old file
+```
+class ApplicationController < ActionController::Base
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery with: :exception
+end
+```
+
+## Updates 
 ```
 class ApplicationController < ActionController::Base
  # Prevent CSRF attacks by raising an exception.
@@ -3682,19 +3711,21 @@ class ApplicationController < ActionController::Base
 protected
 
  def configure_permitted_parameters
-   devise_parameter_sanitizer.for(:sign_up) << :name
-   devise_parameter_sanitizer.for(:account_update) << :name
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name])
  end
+   
 end
 ```
 
-### Note: Newer Versions of devise use a different syntax. See below:
+### Note: older Versions of devise use a different syntax. See below:
 ```
-  devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+  devise_parameter_sanitizer.for(:sign_up) << :name
+  devise_parameter_sanitizer.for(:account_update) << :name
 ```
 
 
-## 5. Add name field under devise registrations view. 
+## 5. Add name field under devise registrations view.  (signup)
 
 *app/views/devise/registrations/new.html.erb*
 

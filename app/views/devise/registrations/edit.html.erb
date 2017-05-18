@@ -9,17 +9,22 @@
       <%= devise_error_messages! %>
 
       <div class="form-group">
+       <%= f.label :name %>
+       <%= f.text_field :name, class: "form-control", :autofocus => true %>
+      </div>
+
+      <div class="form-group">
         <%= f.label :email %>
         <%= f.email_field :email, class: "form-control", :autofocus => true %>
       </div>
 
       <div class="form-group">
-        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i>
+        <%= f.label :new_password %> <i>(leave blank if you don't want to change it)</i>
         <%= f.password_field :password, class: "form-control", :autocomplete => "off" %>
       </div>
 
       <div class="form-group">
-        <%= f.label :password_confirmation %><br />
+        <%= f.label :new_password_confirmation %><br />
         <%= f.password_field :password_confirmation, class: "form-control", :autocomplete => "off" %>
       </div>
 
