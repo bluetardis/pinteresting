@@ -139,12 +139,15 @@ Rails.application.configure do
 
 [https://stripe.com/docs/checkout/guides/rails](https://stripe.com/docs/checkout/guides/rails)
 
+
 Notes: 
+
 * PCI Compliant
 * You receive a token rather than the users credit card information
 * Comes with standard checkout but you can make custom forms
 
 -----
+
 # Creating the home page
 ```
 rails generate controller pages home
@@ -161,20 +164,19 @@ rails destroy whatever blah blah
 ```
 
 ## Commenting in .erb files
+
 [ERB Formatting etc.](https://docs.puppet.com/puppet/4.10/lang_template_erb.html)
 
-Use the following.  This can be placed either in line or to comment on a single line
+Use the following.  This can be placed either in line or to comment on a single line.
 
 Its a good idea to comment start and end of blocks as they can get complicated later.
 
 
 ```
     <!== Prompt them to Login or SignUp -->
+    #Do something here
+    <!== End of if loop for blah -->
 ```
-
-or
-
-```<%# COMMENT %>``` Removed from the final output.
 
 
 -----
@@ -2947,9 +2949,9 @@ Complete rework of the page:
 * move the if user_sign_in to the header partial (next step)
 * cleanup the rest of the table stuff eg the <tr> (table row tags) 
 * remove the <br> at the end
-* wrap the entire file in a div of id pins <div id="pins">
-* make a new pin class of "box" and enclose each pin     <div class="box">
-* We will create styling for this under stylesheets shortly. (pins.css.scss)
+* wrap the entire file in a div of id pins ```<div id="pins">```
+* make a new pin class of "box" and enclose each pin     ```<div class="box">```
+* We will create styling for this under stylesheets shortly. *pins.css.scss*
 
 
 ```
@@ -3073,10 +3075,9 @@ Note the doco: it muse be loaded after jquery and before turbolinks.
 ## 9. Update our Pins Index View for transitions and styling (animation)
 */app/views/pins/index.html.erb*
 
-* Turn animation on with: <div id="pins" class="transitions-enabled">
-* IMAGE: style the div box class with bootstrap:     <div class="box panel panel-default"> 
-* OTHER: Style the body:       <div class="panel-body">
-
+* Turn animation on with: ```<div id="pins" class="transitions-enabled">```
+* IMAGE: style the div box class with bootstrap:    ``` <div class="box panel panel-default"> ```
+* OTHER: Style the body:	```       <div class="panel-body"> ```
 
 
 ```
@@ -3136,9 +3137,10 @@ git push
 
 
 ## 1. Update our Pins index for clickable images  
-* Add a link_to the existing image_tag:       <%= link_to image_tag(pin.image.url(:medium)), pin %>
+
+* Add a link_to the existing image_tag:       ```<%= link_to image_tag(pin.image.url(:medium)), pin %>```
 * Remove the 'Show' and its link as its now redudant.
-* Add the Edit/Destroy in a new div called actions.           <div class="actions">
+* Add the Edit/Destroy in a new div called actions.          ``` <div class="actions">```
 * Wrap the description and email in ```<p>``` tags so they get new lines
 * Style the user email in bold ```<strong>```
 
@@ -3175,10 +3177,11 @@ Basically we are moving the existing line with the link_to and replaceing the 'S
 * Configure the panel heading and body
 * Remove the Description tag
 * Add the user (have to update to @pin )
-* Wrap the description and email in <p> tags so they get new lines
+* Wrap the description and email in ```<p> tags so they get new lines </p>```
 * Replace the :medium from the image with :large after adding to pin.rb
 
 ### Note if you want a new image size that doesnt exist you need to edit the model.rb file and then regen missing styles
+
 ```
 rake paperclip:refresh:missing_styles
 ```
@@ -3372,6 +3375,7 @@ if user_signed_in?
 We have changed the logic to only show this if the user hasnt logged in so we can remove the logic in the file...
 
 #### Old file
+
 ```
 <div class="jumbotron">
   <h1>Welcome</h1>
@@ -3391,10 +3395,10 @@ We have changed the logic to only show this if the user hasnt logged in so we ca
     </p>
   <% end %>  <!== user_sign_in block -->
 </div>
-
 ```
 
 #### Updated file
+
 ```
 <div class="jumbotron">
   <h1>Welcome</h1>
@@ -3519,6 +3523,7 @@ This becomes chainable just like other Active Record queries we covered above wi
 ```
 
 The default is 50.  We can speficy how many we want as follows (eg 8)
+
 ```
 .paginate(:page => params[:page], :per_page => 8)
 ```
