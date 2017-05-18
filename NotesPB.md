@@ -132,7 +132,18 @@ Rails.application.configure do
     #cloud9 and pb emu
   end
 ```
-  
+
+
+-----
+# Stripe Integration
+
+[https://stripe.com/docs/checkout/guides/rails](https://stripe.com/docs/checkout/guides/rails)
+
+Notes: 
+* PCI Compliant
+* You receive a token rather than the users credit card information
+* Comes with standard checkout but you can make custom forms
+
 -----
 # Creating the home page
 ```
