@@ -3593,7 +3593,10 @@ bundle install
 ```
 
 ### Update pagination to use the renderer  
-In your view, use the renderer: BootstrapPagination::Rails option with the will_paginate helper. You can wrap it in a div tag to center if you want.
+In your view, use the renderer: 
+BootstrapPagination::Rails option with the will_paginate helper.
+
+You can wrap it in a div tag to center if you want.
 
 *app/views/pins/index.html.erb*
 
@@ -3614,11 +3617,106 @@ Close running server (ex. CTRL + C)
 rails server -p $PORT -b $IP
 ```
 
+-----
+
+# Adding names to users (adding fields to a table)
+
+Using migrations, you can add attributes to your tables.
+In this example, add a name field to your users, but you can do the same thing with usernames, addresses, and anything else.
+
+## 1. Create database migration to add name column to users
+
+[Rails Migration Documentation](http://guides.rubyonrails.org/migrations.html#creating-a-migration)
+
+```
+rails generate migration AddNameToUsers name:string
+```
+
+
+## 2. Run migration file
+
+### locally 
+```
+rake db:migrate
+```
+
+### heroku (you will need to push first)
+```
+heroku run rake db:migrate
+```
+
+
+## 3. Prompt for more info on next login
+Edit devise account settings to ask users for names when they sign up  
+
+*app/views/devise/registrations/edit.html.erb*
+
+```
+.
+.
+.
+     <div class="form-group">
+       <%= f.label :name %>
+       <%= f.text_field :name, class: "form-control", :autofocus => true %>
+     </div>
+.
+.
+.
+```
+
+
+## 4. "White label" attribute on form for strong parameters  
+[Devise Strong Parameters Documentation](https://github.com/plataformatec/devise#strong-parameters)
+
+### Define a method in application controller to run with a before action
+
+*app/controllers/application_controller.rb*
+
+```
+class ApplicationController < ActionController::Base
+ # Prevent CSRF attacks by raising an exception.
+ # For APIs, you may want to use :null_session instead.
+ protect_from_forgery with: :exception
+ before_filter :configure_permitted_parameters, if: :devise_controller?
+
+protected
+
+ def configure_permitted_parameters
+   devise_parameter_sanitizer.for(:sign_up) << :name
+   devise_parameter_sanitizer.for(:account_update) << :name
+ end
+end
+```
+
+### Note: Newer Versions of devise use a different syntax. See below:
+```
+  devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+```
+
+
+## 5. Add name field under devise registrations view. 
+
+*app/views/devise/registrations/new.html.erb*
+
+```
+.
+.
+.
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true, class: "form-control" %>
+      </div>
+.
+.
+.
+```
+
+
 
 ## 8. Commit changes to Git.  
 ```
 git add .
-git commit -am "Added pagination to pins index"
+git commit -am "Added Names to users"
 ```
 
 
