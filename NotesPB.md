@@ -3476,4 +3476,145 @@ git add .
 git commit -am "Load pins in index action in reverse chronological order"
 ```
 
+-----
+
+# Implement Pagination
+
+At some point you'll want numbered pages or pagination as otherwise the page will be too large/take too long to load.
+
+## 1. Install will_paginate gem  
+[https://github.com/mislav/will_paginate#basic-will_paginate-use](https://github.com/mislav/will_paginate#basic-will_paginate-use)
+
+### Add will_paginate gem to Gemfile
+
+bottom of the Gemfile before group :development etc.
+
+
+*/Gemfile*
+
+```
+.
+.
+.
+gem 'will_paginate', '~> 3.0.5'
+.
+.
+.
+```
+
+### Install
+And then run...
+```
+bundle install
+```
+
+
+## 2. Add Paginate Method to pins_controller 
+
+[https://github.com/mislav/will_paginate#basic-will_paginate-use](https://github.com/mislav/will_paginate#basic-will_paginate-use)
+
+This becomes chainable just like other Active Record queries we covered above with DESC.
+```
+.paginate(:page => params[:page])
+```
+
+The default is 50.  We can speficy how many we want as follows (eg 8)
+```
+.paginate(:page => params[:page], :per_page => 8)
+```
+
+### Default pagination (50)
+*app/controllers/pins_controller.rb*
+```
+.
+.
+.
+ def index
+   @pins = Pin.all.order("created_at DESC").paginate(:page => params[:page])
+ end
+.
+.
+.
+```
+
+## 4. Add additional arguments to change the per page limit  
+
+Lets adjust as needed (in this case 8 is a good start)
+*app/controllers/pins_controller.rb*
+
+```
+.. 
+def index
+   @pins = Pin.all.order("created_at DESC").paginate(:page => params[:page], :per_page => 8)
+ end
+..
+```
+
+
+## 5. Render page links in the view.  
+We need to give the users a way to change pages.
+
+Add to the very bottom of index.html.erb
+
+*app/views/pins/index.html.erb*
+
+```
+..
+<%= will_paginate @pins %>
+```
+
+
+## 6. Change the Paginator to use Bootstrap Styling
+Create a Paginator using will_paginate-bootstrap gem  
+
+[https://github.com/nickpad/will_paginate-bootstrap#install](https://github.com/nickpad/will_paginate-bootstrap#install)
+
+### Add will_paginate gem to Gemfile
+
+After the existing paginator gem.  
+This will allow us to use a renderer
+
+*/Gemfile*
+```
+..
+gem 'will_paginate-bootstrap'
+..
+```
+
+### Bundle Install to Add New Gem
+
+```
+bundle install
+```
+
+### Update pagination to use the renderer  
+In your view, use the renderer: BootstrapPagination::Rails option with the will_paginate helper. You can wrap it in a div tag to center if you want.
+
+*app/views/pins/index.html.erb*
+
+```
+.
+.
+.
+<div class="center">
+   <%= will_paginate @pins, renderer: BootstrapPagination::Rails %>
+</div>
+```
+
+
+## 7. Restart server to load will_paginate_bootstrap gem
+Close running server (ex. CTRL + C)
+
+```
+rails server -p $PORT -b $IP
+```
+
+
+## 8. Commit changes to Git.  
+```
+git add .
+git commit -am "Added pagination to pins index"
+```
+
+
 

@@ -42,6 +42,11 @@ gem 'aws-sdk', '< 2.0' #This is using the v2 SDK but forcing <v2 for compatibili
 #masonry Rails
 gem 'masonry-rails', '~> 0.2.0'
 
+#pagination.
+gem 'will_paginate', '~> 3.0.5'
+gem 'will_paginate-bootstrap'
+
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

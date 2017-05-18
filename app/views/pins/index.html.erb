@@ -26,3 +26,9 @@
     </div>
   <% end %>
 </div> 
+
+<!-- Display pagination links for the user -->
+<!-- Wrapping in a div class to center, using bootstrap for styling -->
+<div class="center">
+   <%= will_paginate @pins, renderer: BootstrapPagination::Rails %>
+</div>

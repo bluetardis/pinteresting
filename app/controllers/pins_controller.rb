@@ -8,7 +8,8 @@ class PinsController < ApplicationController
      # @pins = Pin.all # original
      
      #active record query - created_at descending order.
-      @pins = Pin.all.order("created_at DESC")
+     @pins = Pin.all.order("created_at DESC").paginate(:page => params[:page], :per_page => 8)
+      
   end
 
   # GET /pins/1
