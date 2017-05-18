@@ -10,6 +10,6 @@
 
 This is the pinteresting sample for
 
-[Pinteresting](https://pinteresting-peterbishop.c9users.io)
+[Pinteresting](https://pinteresting123.herokuapp.com/)
 
 by [Blue Tardis](https://bluetardis.com)

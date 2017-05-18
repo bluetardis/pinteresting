@@ -2493,7 +2493,7 @@ The specific code is below and goes after ```belongs_to :user```.
 
 **Notes**
 
-* The ```:styles``` allows us to get rails to create multiple versions of the file when uploaded.  eg Large/Medium/Thumb and we can define their sizes.
+* The ```:styles``` allows us to get rails to create multiple versions of the file when uploaded.  eg Medium/Thumb and we can define their sizes.
 * Using ```:default_url => "/images/:style/missing.png"``` We can pass through a default URL for a missing image.
 
 
@@ -3111,8 +3111,8 @@ git push
 * Add a link_to the existing image_tag:       <%= link_to image_tag(pin.image.url(:medium)), pin %>
 * Remove the 'Show' and its link as its now redudant.
 * Add the Edit/Destroy in a new div called actions.           <div class="actions">
-* Wrap the description and email in <p> tags so they get new lines
-* Style the user email in bold <strong>
+* Wrap the description and email in ```<p>``` tags so they get new lines
+* Style the user email in bold ```<strong>```
 
 Basically we are moving the existing line with the link_to and replaceing the 'Show' with the image.  We need to wrap it in parenthesis so rails knows what we want exactly.
 
@@ -3268,11 +3268,14 @@ As per above for edit on the single pin view
 ```
 
 
-## 4. Add Glyphicons URL - not in video
-UPDATE: One of Chrome's updates messed up the Glyphicons, and it's been broken for months. Here is the fix:
+## 4. Add Glyphicons URL for Chrome (if needed)
 
-app/assets/stylesheetsbootstrap_and customization.css.scss
-
+*app/assets/stylesheetsbootstrap_and_customization.css.scss*
+```
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css");
+```
+
+-----
+
