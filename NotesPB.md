@@ -2162,6 +2162,24 @@ Back in Rails console (in our terminal) let's set a User ID on a Pin.
 > pin.user
 ```
 
+## Rails Console Replace ALL
+[https://apidock.com/rails/ActiveRecord/Base/update_all/class](https://apidock.com/rails/ActiveRecord/Base/update_all/class)
+
+In case you need to do some work... here are some examples.  Dont forget to wrap the operation in ""
+
+```
+ # Update all billing objects with the 3 different attributes given
+  Billing.update_all( "category = 'authorized', approved = 1, author = 'David'" )
+
+  # Update records that match our conditions
+  Billing.update_all( "author = 'David'", "title LIKE '%Rails%'" )
+
+  # Update records that match our conditions but limit it to 5 ordered by date
+  Billing.update_all( "author = 'David'", "title LIKE '%Rails%'",
+                        :order => 'created_at', :limit => 5 )
+```
+
+
 -----
 
 # Adding Security and Relationships Part 2
@@ -3805,6 +3823,62 @@ end
 .
 .
 ```
+
+-----
+
+# Replace eMails with Names... (views)
+We are asking a user for their name so we can show their name to other users to identify them instead of showing their email, which could become a privacy concern after a while. 
+
+
+##1. Replacing email with names on pin views.
+We are going to swap out pin.name for pin.email
+
+*app/views/pins/index.html.erb*
+**Original (with eMail)**
+```
+.
+.
+.
+        <p><strong><%= pin.user.email if pin.user %></strong></p>
+.
+.
+.
+
+```
+
+**New (with Names)**
+```
+.
+.
+.
+        <p><strong><%= pin.user.name if pin.user %></strong></p>
+.
+.
+.
+
+```
+
+*app/views/pins/show.html.erb*
+new
+```
+.
+.
+.
+        <p><strong><%= @pin.user.name if @pin.user %></strong></p>
+.
+.
+.
+```
+
+## 2. Commit changes to git. 
+```
+git add .
+git commit -am "Add names to users"
+git push
+git push heroku master
+heroku run rake db:migrate
+```
+
 
 -----
 

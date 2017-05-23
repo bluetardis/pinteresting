@@ -3,8 +3,8 @@ Rails.application.configure do
   
     #Fix error in dev by whitelisting
   class Application < Rails::Application
-    config.web_console.whitelisted_ips = %w( 10.240.0.0/16 122.108.59.33 1.144.97.165 1.129.96.186 1.129.96.6  1.129.97.118)
-    #cloud9, pb emu, Android_AP, PB Telstra iPhone
+    config.web_console.whitelisted_ips = %w( 10.240.0.0/16 122.108.59.33 1.144.97.165 1.129.96.0/24 )
+    #cloud9, pb emu, Android_AP, PB Telstra iPhone (.96, .97 /24)
   end
 
 
