@@ -1116,22 +1116,35 @@ Devise.setup do |config|
 # etc
 end
 ```
-**PB Note:** You probably want to use this rather than the actual key.  
+**PB Note:** 
+You probably want to use this rather than the actual key.  
+You can then set the parameters via heroku dashboard or terminal
 ```
 config.secret_key = ENV[ 'DEVISE_TOKEN_AUTH_SECRET_KEY' ]
 ```
+
+#### Setting Heroku ENV Parameters
+Either use the Heroku Dashboard or set/query from the terminal
+```
+heroku config   ##query all variables
+heroku config:set DEVISE_TOKEN_AUTH_SECRET_KEY=***Something Secret***
+```
+
 
 
 ## 4. Setting up Devise
 
 These are the steps needed to get it installed on our app.  These come from the information provided to the terminal window after the prior step (Installing Devise)
 
-### 1. Default URLs
+### 1. Default URLs for mailer
+[https://rubyonrailshelp.wordpress.com/2014/01/02/setting-up-mailer-using-devise-for-forgot-password/](https://rubyonrailshelp.wordpress.com/2014/01/02/setting-up-mailer-using-devise-for-forgot-password/)
+
 We are going to add these to the bottom of the following files.
 NOTE: This needs to be amended to suite our actual server etc.
 
 *config/environments/development.rb*
 ```
+# Mailer for Devise
 config.action_mailer.default_url_options = { host: 'localhost', port: 8080 }
 ```
 
@@ -4061,4 +4074,6 @@ Once in the console...
 
 To read more about what we're doing in the console check out:
 [http://guides.rubyonrails.org/active_record_querying.html](http://guides.rubyonrails.org/active_record_querying.html)
+
+-----
 
