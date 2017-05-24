@@ -3882,3 +3882,183 @@ heroku run rake db:migrate
 
 -----
 
+# Cleaning up users (what happens if a user is deleted etc.)
+
+
+## 1. The bug
+Some of the pins are showing "edit" and "delete" buttons when we are signed out. Those buttons should only be visible when the user is signed in (...and not for every user!). 
+We do some detective work below but basically its due to the fact that the logic we are using fails (something returns true when it shouldnt.)
+
+
+## 2. Find the files with code related to the bug
+
+**existing file example**
+*views/pins/index.html.erb*
+
+```
+        <% if pin.user == current_user %>
+          <div class="actions">
+            <%= link_to edit_pin_path(pin) do %>
+              <span class="glyphicon glyphicon-edit"></span>
+              Edit
+            <% end %>
+            
+            <%= link_to pin, method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <span class="glyphicon glyphicon-trash"></span>
+              Delete
+            <% end %>
+            
+            </div>
+        <% end %>
+
+```
+
+**existing file example**
+*views/pins/show.html.erb*
+```
+        <% if @pin.user == current_user %>
+          <%= link_to edit_pin_path(@pin) do %>
+            <span class="glyphicon glyphicon-edit"></span>
+            Edit
+          <% end %>
+        <% end %>
+```
+
+
+## 3. Identify the cause of the bug
+In both views/pins/index and views/pins/show we are trying to make sure that the "edit" and "delete" controls only appear if the pin belongs to the current user.
+
+*views/pins/index.html.erb*
+```
+<% if pin.user == current_user %>
+```
+
+*views/pins/show.html.erb*
+```
+<% if @pin.user == current_user %>
+```
+
+It looks like the way we are doing this is not working every time.
+
+### Why?
+Let's find out... by analyzing our "if" statement in one of the cases where it is failing.
+
+```
+heroku run rails console
+```
+
+Once in the console...
+
+```
+> pin = Pin.find(58) #get the id of a buggy pin from the url for its show page 
+                     #this id will most likely not be 58 for you
+=> #<Pin id:58, ... , user_id: 83, ... > 
+#again, the user_id you get will probably be different
+
+> pin.user #finds the user for this pin
+=> nil 
+#this is what you should get if you called pin.user on a buggy pin
+
+> User.find(83)
+=> ActiveRecord::RecordNotFound: Couldn't find User with id=83 
+#this means that the user that created that pin no longer exists!
+```
+
+**Someone created an account, uploaded a pin, and then deleted their account. This is why "pin.user" returns nil.**
+
+**The "current_user" will also be nil when no one is logged in.**
+
+For any pin that doesn't have a user our "if" statement will evaluate to true when we are not logged in. Both sides of the "==" will be nil so the statement will be true.
+
+```
+<% if @pin.user == current_user %>
+```
+Eg if not logged in the current_user will evaluate true.
+When this "if" statement evaluates to true we will see everything inside it, meaning we will see the "edit" and "destroy" links.
+
+
+## 4. Fix the bug
+There are two options for how we can prevent the "edit" and "delete" links from appearing when they shouldn't.
+
+### Option 1 - fix the "if" statement
+Since we never want anyone to see "edit" and "destroy" links if they are not signed in we can add a clause to our "if" statement that checks that the "current_user" is not nil.
+
+*views/pins/index.html.erb*
+```
+<% if current_user && pin.user == current_user %>
+```
+
+*views/pins/show.html.erb*
+```
+<% if current_user && @pin.user == current_user %>
+```
+
+
+The way "&&" works in Ruby our "if" statement will only pass if both side of the "&&" are true.
+```
+false && false  #false
+true && false   #false
+false && true   #false
+true && true    #true
+```
+
+Now we don't see any "edit" or "destroy" links anywhere when we are signed out.
+
+
+### Option 2 - "dependent: :destroy"
+The underlying problem is that we are not removing a user's pins when they delete their account. 
+**Think before implementing as you may not need to implement this.  Eg We may have content that we can show and only edit if the user has rights.  EG for content we dont necessarily delete because a user no longer exists.**
+
+
+Original *models/user.rb*
+```
+Class User < ActiveRecord::Base
+  ...
+  has_many :pins
+  ...
+end
+```
+
+Modified *models/user.rb*
+```
+Class User < ActiveRecord::Base
+  ...
+  has_many :pins, dependent: :destroy
+  ...
+end
+```
+
+This destroys a user's pins automatically when the user object is destroyed. Now when we delete an account we don't see that user's pins at all.
+
+
+## 5. Why not do both? 
+Do option 1 and option 2. Why not?
+
+
+## 6. Commit changes
+```
+git add .
+git commit -am "Fix a bug where Edit/Delete links show up on pins without users"
+git push
+git push heroku master
+```
+
+
+## 7. Clean up old pins in your database 
+The last thing we want to take care of is removing old pins for users that don't exist anymore. Remember "dependent: :destroy" will work from now on but it won't remove old pins.
+
+terminal
+```
+heroku run rails console
+```
+
+Once in the console...
+
+```
+> Pin.includes(:user).where(users: {id: nil}) #should return all the pins with no user
+> Pin.includes(:user).where(users: {id: nil}).destroy_all
+```
+
+To read more about what we're doing in the console check out:
+[http://guides.rubyonrails.org/active_record_querying.html](http://guides.rubyonrails.org/active_record_querying.html)
+
