@@ -4243,3 +4243,29 @@ If images that came in the theme arent loading?
 ```
 
 -----
+
+# Page Specific CSS
+
+How can we determine what page we are on?
+
+## Wrap the application.html.erb body in a Class
+We wrap the body code for each page in a class we can then query.
+```
+<body class="<%= controller_name %> <%= action_name %>">
+```
+
+## Style the css using above
+*/app/assets/stylesheets/pages.css.scss*
+
+Fill in the scope for each page with the style tags you need.
+
+```
+.home{
+  background-color:orange;
+}
+
+.about{
+  background-color:blue;
+}
+```
+
