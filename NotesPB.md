@@ -4269,3 +4269,34 @@ Fill in the scope for each page with the style tags you need.
 }
 ```
 
+### Note
+If you want all pages then use 
+```
+.pages{
+  background-color:pink;
+}
+```
+
+-----
+
+# Styling CSS Tips
+
+## Use the Element Inspector (Chrome)
+* Open in Chrome
+* Turn the Element Inspector on
+* Hover over the element
+* Use that to determine the style part to work on.
+
+eg any H2 elements in a Panel Heading  
+.panelheading   # class
+h2              # element in the div 
+{}              # styling
+
+
+```
+.panel-heading h2{ color:orange; }
+```
+
+-----
+
+
