@@ -1,15 +1,7 @@
-# OneMonth - PB Notes
-
-This is the pinteresting sample for:
-
-[Pinteresting C9](https://pinteresting-peterbishop.c9users.io)
-
-[Pinteresting Heroku](http://pinteresting123.herokuapp.com)
-
-by [Blue Tardis](https://bluetardis.com)
-
 -----
-# Ruby
+
+# Ruby on Rails Notes 
+# PB
 
 ## Check the version
 ```
