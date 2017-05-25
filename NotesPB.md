@@ -51,8 +51,8 @@ rails server -p $PORT -b $IP
 
 
 
-## Git Setup
-### Local Config
+## Git Setup - Local Config
+
 ```
 git config --global user.name "Your Name"
 git config --global user.name #checks that your name is correct
@@ -67,15 +67,8 @@ git commit -am "initial commit"
 ```
 
 
-#### How to Recover/roll back
-*In case we stuff something up somewhere*
-```
-git checkout -f #brings us back to the last version
-```
+## Git Setup - Server Config for GitHub etc.
 
-
-
-## Server Config for GitHub etc.
 ### generate a key ssh (CLOUD9 already as this done)
 ```
 ssh-keygen -t rsa -C "peter@bluetardis.com.au"
@@ -109,6 +102,26 @@ gid add .
 git commit -am "What changed"
 git push
 ```
+
+
+## How to Recover/roll back using Git
+*In case we stuff something up somewhere*
+```
+git checkout -f #brings us back to the last version
+```
+
+## Helpful Git Aliases 
+```
+git config --global alias.co checkout
+git config --global alias.cob "checkout -b"
+git config --global alias.ci commit
+git config --gbloal alias.dif diff
+git config --global alias.s status
+git config --global alias.br branch
+git config --global alias.l log
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+```
+
 
 
 -----
@@ -1148,9 +1161,10 @@ NOTE: This needs to be amended to suite our actual server etc.
 config.action_mailer.default_url_options = { host: 'localhost', port: 8080 }
 ```
 
-
+**Heroku wont send email on free dynos.. The config below needs to be there but its worth setting up SendGrid**
 *config/environments/production.rb*
 NOTE: This needs to be amended to suite our actual server etc. eg Heroku Name
+
 ```
   # Mailer for Devise
   config.action_mailer.default_url_options = { host: 'https://pinteresting123.herokuapp.com' }
@@ -4096,3 +4110,136 @@ To read more about what we're doing in the console check out:
 
 -----
 
+# Wrap Bootstrap Theme onto a Rails App
+
+## Download a theme and review/investigate theme elements.
+In this case [Freelancer](https://startbootstrap.com/template-overviews/freelancer/)
+
+Look at the theme and figure out what we have eg
+*the index.html* gives us an idea as to how it works.
+* Site Navigation
+* Header
+* etc 
+
+```
+index.html
+/css
+/fonts
+/freelancer/css/...
+/less
+```
+
+Basically find the *sections* of the site from the *index.html* as these are the bits that we will put into our rails .erb
+You can use this by viewing the index.html with the browser *web inspector* to figure out what section is what.
+
+Figure out the elements you want.
+
+## Copy .css files
+
+### From
+```
+/BootStrapThemeName/css/*.css
+```
+
+### To
+```
+/app/assets/stylesheets
+```
+
+
+## Copy image files
+
+### From
+```
+/BootStrapThemeName/img/*.*  #include any folders
+```
+
+### To
+```
+/app/assets/images
+```
+
+
+## Copy JavaScript
+
+### From
+```
+/BootStrapThemeName/js/*.*  #include any folders
+```
+
+### To
+```
+/app/assets/javascripts
+```
+
+**This might need tweaking but its a good start**
+
+
+
+## Design Elements
+
+### Navigation bar
+* Copy from index.html to the /app/views/layouts/_header.html.erb
+* Dont forget to render this in application.html.erb with 
+```
+  <%= render 'layouts/header' %>
+```
+
+
+### Fix Colours etc. 
+YOu might need to go fishing through lookating at the browser with th eelement inspector to find the hex colours.
+We will need to edit the following file and comment out bootstrap as we are automatically loading another version and this is overriding things.
+
+*/app/assets/stylesheets/bootstrap_and_customization.css*
+```
+/* @import 'bootstrap'; */
+```
+
+
+## Wire up the Page Links
+*application.html.erb* or *_header.html.erb*
+
+* Add Li (links) following their style to pages as needed
+* Home, About,  etc.
+* Change the hard coded to use embedded ruby
+
+**Change from**
+```
+<a href="#about">About</a>
+```
+
+**Change To **
+```
+<%= link_to "Home", root_path %>
+<%= link_to "About", about_path %>
+```
+
+## Fix the Jumbotron 
+* Find the element eg Header in the .html example
+* Move it to the Specific page eg the home page
+* Reword/fix as needed
+* remove any old stuff
+
+
+## Fix broken image links
+If images that came in the theme arent loading?
+
+
+### Change the src=
+```
+<img class="img-responsive" src="img/profile.png" alt>
+```
+
+
+### Firstly: Replace the .html with a rails image_tag
+```
+<%= image_tag("profile.png") %>
+```
+
+
+### Secondly: Add in the class
+```
+<%= image_tag("profile.png", class: "img-response") %>
+```
+
+-----
