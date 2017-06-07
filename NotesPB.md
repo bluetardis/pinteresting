@@ -1,5 +1,3 @@
------
-
 # Ruby on Rails Notes 
 # PB
 
@@ -179,7 +177,7 @@ Its a good idea to comment start and end of blocks as they can get complicated l
 
 ```
     <!== Prompt them to Login or SignUp -->
-    #Do something here
+    	#Do something here
     <!== End of if loop for blah -->
 ```
 
@@ -959,6 +957,11 @@ heroku rake db:migrate:status	#heroku
 ## Migration Rollback
 ```
 rake db:rollback
+```
+
+## Git Revert to a version
+```
+git reset --hard <tag/branch/commit id>
 ```
 
 ## Heroku Logs
@@ -4290,5 +4293,3 @@ h2              # element in the div
 ```
 
 -----
-
-
